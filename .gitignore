@@ -1,0 +1,29 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.*
+.dev.vars
+.vitest/
+.wrangler/
+
+# Generated at build from the sibling docs (never committed — rebuild with `pnpm build:index`).
+# The docs source of truth lives in the library repos; this repo only indexes it.
+src/generated/index.ts
+data/index.json
+python/src/cendor_mcp/_data/index.json
+
+# Python
+__pycache__/
+*.egg-info/
+.venv/
+build/
+python/dist/
+
+# Guard against an in-repo docs clone (docs are read from siblings, never copied here).
+/cendor-libs/
+/cendor-sdk/
+/cendor-libs-js/

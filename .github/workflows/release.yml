@@ -1,0 +1,53 @@
+name: Release
+
+# RELEASE POSTURE — HELD FOR LAUNCH.
+# @cendor/mcp is a NEW npm package. It must be published manually the first time (so the name
+# exists) before any automated / OIDC-trusted publish. Until the launch gate, this workflow is
+# MANUAL ONLY (workflow_dispatch). At launch, after the first manual `pnpm publish`, uncomment the
+# push trigger below to match the other cendor JS repos (changeset publish on push-to-main).
+# See PUBLISHING.md.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write # commit version bump + push tags back to main
+  id-token: write # npm provenance via OIDC (once public)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 9.14.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - name: Fetch sibling docs (sparse clone)
+        env:
+          GH_DOCS_TOKEN: ${{ secrets.DOCS_REPOS_TOKEN }}
+        run: node scripts/fetch-docs.mjs
+      - run: pnpm build
+      - name: Version + publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          pnpm exec changeset version
+          git add -A
+          git commit -m "chore: version packages [skip ci]" || echo "no version changes to commit"
+          pnpm exec changeset publish
+          git push --follow-tags origin HEAD:main || echo "nothing to push"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'false' # provenance off while repo is private (sigstore E422)

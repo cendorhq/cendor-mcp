@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Lint needs no docs — always runs.
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 9.14.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  # Build + test index the sibling docs, so this job needs read access to the docs repos.
+  # Mirrors cendor-sdk-js's docs-snippets job: it self-skips when DOCS_REPOS_TOKEN is unset
+  # (e.g. on fork PRs) rather than failing. Docs are fetched, never committed here.
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Check for docs token
+        id: gate
+        env:
+          DOCS_REPOS_TOKEN: ${{ secrets.DOCS_REPOS_TOKEN }}
+        run: |
+          if [ -n "$DOCS_REPOS_TOKEN" ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; echo "No DOCS_REPOS_TOKEN — skipping docs-dependent build/test."; fi
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        if: steps.gate.outputs.ok == 'true'
+        with:
+          version: 9.14.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        if: steps.gate.outputs.ok == 'true'
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+        if: steps.gate.outputs.ok == 'true'
+      - name: Fetch sibling docs (sparse clone)
+        if: steps.gate.outputs.ok == 'true'
+        env:
+          GH_DOCS_TOKEN: ${{ secrets.DOCS_REPOS_TOKEN }}
+        run: node scripts/fetch-docs.mjs
+      - run: pnpm build
+        if: steps.gate.outputs.ok == 'true'
+      - run: pnpm test
+        if: steps.gate.outputs.ok == 'true'

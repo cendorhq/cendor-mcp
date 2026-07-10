@@ -1,0 +1,80 @@
+{
+  "name": "@cendor/mcp",
+  "version": "0.1.0",
+  "description": "Read-only Model Context Protocol server that hands your AI coding assistant Cendor's live docs and correct call-shapes — local (npx) or remote (mcp.cendor.ai). Built from the docs source of truth; never copies docs.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "cendor-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "scripts": {
+    "build:index": "node scripts/build-index.mjs",
+    "build": "pnpm build:index && tsc",
+    "build:cf": "node scripts/fetch-docs.mjs && pnpm build",
+    "clean": "rimraf dist src/generated/index.ts data/index.json python/src/cendor_mcp/_data/index.json",
+    "fetch-docs": "node scripts/fetch-docs.mjs",
+    "typecheck": "pnpm build:index && tsc --noEmit",
+    "test": "pnpm build:index && vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "start": "node dist/cli.js",
+    "dev:stdio": "pnpm build && node dist/cli.js",
+    "dev:worker": "wrangler dev",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@changesets/cli": "^2.27.11",
+    "@types/node": "^22.10.5",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.6",
+    "wrangler": "^4.107.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "docs",
+    "cendor",
+    "ai-assistant",
+    "cloudflare-worker"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cendorhq/cendor-mcp.git"
+  },
+  "homepage": "https://cendor.ai/mcp",
+  "bugs": {
+    "url": "https://github.com/cendorhq/cendor-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

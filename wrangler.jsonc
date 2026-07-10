@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cendor-mcp",
+  // The Worker is the COMPILED server entry. Run `pnpm build` first (tsc emits dist/worker.js from
+  // src/worker.ts, with the docs index inlined via src/generated/index.ts). Wrangler/esbuild then
+  // bundles that already-compiled JS — this avoids the NodeNext ".js"→".ts" resolution friction of
+  // pointing `main` straight at the TypeScript source.
+  "main": "dist/worker.js",
+  "compatibility_date": "2026-07-07",
+  // The remote server is a stateless, read-only Streamable-HTTP MCP endpoint. It uses only Web
+  // APIs (Request/Response/URL) — no Node built-ins — so nodejs_compat is intentionally NOT set.
+  "observability": { "enabled": true },
+  // mcp.cendor.ai — DNS is on Cloudflare (see cendorhq MEMORY: cendor-site-deploy-state). Bind the
+  // custom domain at the launch gate. Held now: do NOT `wrangler deploy` and do NOT cut this DNS.
+  "routes": [{ "pattern": "mcp.cendor.ai", "custom_domain": true }]
+}

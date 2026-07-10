@@ -1,0 +1,18 @@
+{
+  "_comment": "Committed FALLBACK mirror of the site /releases source of truth (cendor-site/src/pages/releases.astro). scripts/build-index.mjs prefers to parse the live releases.astro when a cendor-site sibling checkout is present, and falls back to this file otherwise. Keep in sync after every release (see cendorhq root CLAUDE.md -> 'After EVERY release, sync all version/reference surfaces'). Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
+  "asOf": "2026-07-10",
+  "libraries": [
+    { "name": "core", "pypi": "cendor-core", "pypiVer": "1.5.0", "npm": "core", "npmVer": "0.5.0" },
+    { "name": "tokenguard", "pypi": "cendor-tokenguard", "pypiVer": "1.1.2", "npm": "tokenguard", "npmVer": "0.2.6" },
+    { "name": "guardrails", "pypi": "cendor-guardrails", "pypiVer": "1.5.0", "npm": "guardrails", "npmVer": "0.6.0" },
+    { "name": "contextkit", "pypi": "cendor-contextkit", "pypiVer": "1.0.2", "npm": "contextkit", "npmVer": "1.0.6" },
+    { "name": "squeeze", "pypi": "cendor-squeeze", "pypiVer": "1.0.2", "npm": "squeeze", "npmVer": "0.2.6" },
+    { "name": "cassette", "pypi": "cendor-cassette", "pypiVer": "1.0.1", "npm": "cassette", "npmVer": "0.2.6" },
+    { "name": "acttrace", "pypi": "cendor-acttrace", "pypiVer": "1.4.1", "npm": "acttrace", "npmVer": "0.5.2" },
+    { "name": "libs", "pypi": "cendor-libs", "pypiVer": "1.2.0", "npm": "libs", "npmVer": "0.2.11" },
+    { "name": "cendor", "pypi": "cendor", "pypiVer": "1.1.0", "npm": "", "npmVer": "" }
+  ],
+  "sdk": [
+    { "name": "sdk", "pypi": "cendor-sdk", "pypiVer": "1.6.0", "npm": "sdk", "npmVer": "0.9.0" }
+  ]
+}

@@ -1,25 +1,37 @@
 name: Release
 
-# RELEASE POSTURE — HELD FOR LAUNCH.
-# @cendor/mcp is a NEW npm package. It must be published manually the first time (so the name
-# exists) before any automated / OIDC-trusted publish. Until the launch gate, this workflow is
-# MANUAL ONLY (workflow_dispatch). At launch, after the first manual `pnpm publish`, uncomment the
-# push trigger below to match the other cendor JS repos (changeset publish on push-to-main).
-# See PUBLISHING.md.
+# RELEASE POSTURE — HELD FOR LAUNCH. Both artifacts ship from here; MANUAL ONLY (workflow_dispatch),
+# each gated behind an input so they publish independently:
+#   • npm  @cendor/mcp — changeset publish (needs the NPM_TOKEN secret). First publish can also be done
+#     locally (`pnpm publish`); thereafter uncomment the push trigger to match the other cendor JS repos.
+#   • PyPI cendor-mcp  — OIDC **trusted publishing** (publisher = repo cendorhq/cendor-mcp, this
+#     workflow release.yml, environment `mcp`). No token; the `mcp` environment + id-token: write below
+#     are what the publisher matches on.
+# Both build the docs index from the sibling docs first (fetch-docs needs DOCS_REPOS_TOKEN while the
+# docs repos are private). See PUBLISHING.md.
 on:
   workflow_dispatch:
+    inputs:
+      npm:
+        description: 'Publish @cendor/mcp to npm (needs NPM_TOKEN)'
+        type: boolean
+        default: false
+      pypi:
+        description: 'Publish cendor-mcp to PyPI (OIDC trusted publishing, env mcp)'
+        type: boolean
+        default: false
   # push:
   #   branches: [main]
 
 concurrency: release-${{ github.ref }}
 
-permissions:
-  contents: write # commit version bump + push tags back to main
-  id-token: write # npm provenance via OIDC (once public)
-
 jobs:
-  release:
+  npm:
+    if: ${{ inputs.npm }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # commit version bump + push tags back to main
+      id-token: write # npm provenance via OIDC (once public)
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -51,3 +63,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'false' # provenance off while repo is private (sigstore E422)
+
+  pypi:
+    if: ${{ inputs.pypi }}
+    runs-on: ubuntu-latest
+    environment: mcp # matches the PyPI trusted publisher
+    permissions:
+      id-token: write # OIDC trusted publishing — no stored token
+      contents: read
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          version: 9.14.2
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Fetch sibling docs (sparse clone)
+        env:
+          GH_DOCS_TOKEN: ${{ secrets.DOCS_REPOS_TOKEN }}
+        run: node scripts/fetch-docs.mjs
+      - name: Build docs index (writes python/src/cendor_mcp/_data/index.json)
+        run: pnpm build:index
+      - uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
+      - name: Build wheel + sdist
+        working-directory: python
+        run: uv build
+      - name: Publish to PyPI (OIDC trusted publishing)
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # release/v1
+        with:
+          packages-dir: python/dist

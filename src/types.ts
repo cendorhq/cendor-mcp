@@ -50,6 +50,7 @@ export interface VersionRow {
 export interface Versions {
   libraries: VersionRow[];
   sdk: VersionRow[];
+  devtooling: VersionRow[]; // @cendor/mcp · @cendor/init (own cadence; parsed from releases.astro)
   asOf: string;
   source: string;
 }

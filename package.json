@@ -1,6 +1,6 @@
 {
   "name": "@cendor/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Read-only Model Context Protocol server that hands your AI coding assistant Cendor's live docs and correct call-shapes — local (npx) or remote (mcp.cendor.ai). Built from the docs source of truth; never copies docs.",
   "type": "module",
   "license": "Apache-2.0",

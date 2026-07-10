@@ -7,7 +7,7 @@
 import type { ToolDef } from './types.js';
 
 // Keep in sync with package.json "version".
-export const SERVER_VERSION = '0.1.0';
+export const SERVER_VERSION = '0.1.1';
 export const DEFAULT_PROTOCOL_VERSION = '2025-06-18';
 export const SERVER_INFO = {
   name: 'cendor-mcp',

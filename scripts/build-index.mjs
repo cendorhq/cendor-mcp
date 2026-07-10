@@ -252,6 +252,8 @@ function parseExamples(md) {
 // ---------- versions (from the site /releases source of truth, with a committed fallback) ----------
 
 function parseReleasesAstro(src) {
+  // The regex is anchored to `const <name>: Row[] = [...]`, so each named array is parsed
+  // independently — a third table (`devtooling`) can't leak rows into `libraries`/`sdk`.
   const arr = (name) => {
     const m = src.match(new RegExp(`const ${name}:\\s*Row\\[\\]\\s*=\\s*\\[([\\s\\S]*?)\\];`));
     if (!m) return [];
@@ -263,7 +265,7 @@ function parseReleasesAstro(src) {
     }
     return rows;
   };
-  return { libraries: arr('libraries'), sdk: arr('sdk') };
+  return { libraries: arr('libraries'), sdk: arr('sdk'), devtooling: arr('devtooling') };
 }
 
 function loadVersions() {
@@ -281,6 +283,7 @@ function loadVersions() {
   return {
     libraries: fallback.libraries,
     sdk: fallback.sdk,
+    devtooling: fallback.devtooling || [],
     asOf: fallback.asOf || '',
     source: 'versions.json',
   };

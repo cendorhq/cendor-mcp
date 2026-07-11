@@ -2,6 +2,15 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.2 — 2026-07-11
+
+- **Refresh the bundled docs index.** Picks up the SDK docs revamp and the site/docs UX round-2 work:
+  the new SDK `architecture.md` (the two-layer story + per-library "where it's used in the SDK"
+  tables), the styled diagrams, the enlarged SDK `for-ai-assistants` trap sheet, and the added
+  canonical SDK trap rows + governed-agent example. Local `npx @cendor/mcp` / `uvx cendor-mcp` users
+  were serving the 0.1.1 snapshot; this brings the bundled index level with `mcp.cendor.ai`. No tool
+  or transport changes — index content only.
+
 ## 0.1.1 — 2026-07-11
 
 - **Refresh the bundled docs index.** 0.1.0 shipped a stale index (built before the 2026-07-11 patch

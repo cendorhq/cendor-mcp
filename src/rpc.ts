@@ -7,7 +7,7 @@
 import type { ToolDef } from './types.js';
 
 // Keep in sync with package.json "version".
-export const SERVER_VERSION = '0.1.2';
+export const SERVER_VERSION = '0.1.3';
 // Every spec revision this stateless dispatch implements. initialize clamps to this set — a
 // server must never echo a version it doesn't actually speak (MCP lifecycle: respond with the
 // requested version only if supported, otherwise the latest one the server supports).

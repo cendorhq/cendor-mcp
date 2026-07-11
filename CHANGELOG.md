@@ -2,6 +2,18 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.3 — 2026-07-11
+
+- **MCP protocol-version negotiation is now spec-compliant.** `initialize` clamps: the server
+  responds with the requested `protocolVersion` only when it actually supports it, otherwise with
+  the latest supported revision (previously it echoed back any requested version). Default is now
+  `2025-11-25`.
+- **Refresh the bundled docs index** (29 trap rows — adds the `instrument()` capture-gaps row —
+  and the current published versions, including core 1.5.2 / 0.5.2 with the regenerated price
+  snapshot).
+- The self-reported server version had drifted (0.1.2 shipped reporting 0.1.1); `SERVER_VERSION`
+  is caught up and the committed versions fallback is synced.
+
 ## 0.1.2 — 2026-07-11
 
 - **Refresh the bundled docs index.** Picks up the SDK docs revamp and the site/docs UX round-2 work:

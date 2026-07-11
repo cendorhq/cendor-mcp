@@ -214,6 +214,16 @@ const EXAMPLE_SYNONYMS = {
     'acttrace',
     'evidence',
   ],
+  'run-a-governed-agent-sdk': [
+    'agent',
+    'governed',
+    'sdk',
+    'run',
+    'loop',
+    'budget',
+    'guard',
+    'audit',
+  ],
 };
 
 function matchFence(text, lang) {

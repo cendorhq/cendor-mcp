@@ -16,7 +16,7 @@ describe('index', () => {
     expect(INDEX.pages.length).toBeGreaterThan(20);
     expect(INDEX.chunks.length).toBeGreaterThan(50);
     expect(INDEX.traps.length).toBeGreaterThan(10);
-    expect(INDEX.examples.length).toBe(6);
+    expect(INDEX.examples.length).toBe(7);
     expect(new Set(INDEX.pages.map((p) => p.product))).toContain('sdk');
   });
 

@@ -1,6 +1,6 @@
 # Publishing & deploying cendor-mcp
 
-Three artifacts ship from this repo, **all held for the launch gate**:
+Three artifacts ship from this repo, **all live since 2026-07-10**:
 
 | Artifact | Registry / host | Entry |
 |---|---|---|
@@ -8,9 +8,10 @@ Three artifacts ship from this repo, **all held for the launch gate**:
 | `cendor-mcp` | PyPI | `uvx cendor-mcp` (stdio) |
 | `cendor-mcp` Worker | Cloudflare → `mcp.cendor.ai` | remote Streamable HTTP |
 
-> **Posture: HOLD.** Do not publish or deploy until the owner opens the launch gate. New packages must
-> exist (a first *manual* publish) before any automated/OIDC-trusted publish. The libraries stay
-> server-free; this is optional dev tooling.
+> **Posture: released, gated.** npm + PyPI publish through the `workflow_dispatch`-only
+> `release.yml` (`gh workflow run release.yml -f npm=true -f pypi=true`) — nothing publishes on a
+> plain push. The Worker redeploys on push to `main` via the Cloudflare Workers-Builds git
+> integration. The libraries stay server-free; this is optional dev tooling.
 
 ## Build order (always)
 
@@ -26,59 +27,59 @@ pnpm build                    # = build:index (writes data/index.json + src/gene
 
 ## 1. npm — `@cendor/mcp`
 
-Uses Changesets like the other cendor JS repos, but **publish is manual first**:
+Published by the `npm` job of `.github/workflows/release.yml` (gated behind a `workflow_dispatch`
+input; the job needs `DOCS_REPOS_TOKEN` to clone the private docs and rebuild the index, and
+`NPM_TOKEN` to publish):
 
 ```bash
-# FIRST publish (launch gate) — makes the name exist:
-pnpm build
-pnpm publish --access public --no-git-checks     # pnpm rewrites any workspace ranges
-
-# thereafter (matching cendor-libs-js / cendor-sdk-js): add a changeset, then at launch flip
-# .github/workflows/release.yml's `push: branches: [main]` trigger back on so `changeset publish`
-# runs on push. Provenance stays off (NPM_CONFIG_PROVENANCE=false) while the repo is private.
+# bump "version" in package.json (+ SERVER_VERSION in src/rpc.ts) + CHANGELOG, push, then:
+gh workflow run release.yml -f npm=true
 ```
 
 `files` ships `dist/` (which includes the inlined docs index) + `README`/`LICENSE`/`NOTICE`. The
-package is fully offline once installed.
+package is fully offline once installed. Provenance stays off (`NPM_CONFIG_PROVENANCE=false`) while
+the repo is private — flip to `true` (or move to npm OIDC trusted publishing) when the repo goes
+public.
 
 ## 2. PyPI — `cendor-mcp` (the uvx twin)
 
-The wheel bundles the generated index. **Run the Node index build first** (it writes
-`python/src/cendor_mcp/_data/index.json`, which `pyproject.toml` force-includes via
-`[tool.hatch.build] artifacts`):
+Published by the `pypi` job of the same `release.yml` (OIDC trusted publishing, environment `mcp` —
+no stored token):
+
+```bash
+# bump python/pyproject.toml version + CHANGELOG, push, then:
+gh workflow run release.yml -f pypi=true          # or combine: -f npm=true -f pypi=true
+```
+
+To build locally for verification (the wheel bundles the generated index — **run the Node index
+build first**; it writes `python/src/cendor_mcp/_data/index.json`, which `pyproject.toml`
+force-includes via `[tool.hatch.build] artifacts`):
 
 ```bash
 pnpm build:index         # from the repo ROOT — writes the index into python/…/_data/
 cd python
 uv build                 # sdist + wheel (bundles _data/index.json)
-uv publish               # launch gate only
 ```
 
 ## 3. Cloudflare Worker — `mcp.cendor.ai`
 
-Reuses the site's Workers pattern (see cendorhq MEMORY: `cendor-site-hosting-decision`,
-`cendor-site-deploy-state`). `wrangler.jsonc` points `main` at the compiled `dist/worker.js` (build
-first) and declares the `mcp.cendor.ai` custom-domain route.
+Deployed via the **Cloudflare Workers-Builds git integration** (build command `pnpm build:cf`,
+build secret `GH_DOCS_TOKEN` for the private docs repos): every push to `main` rebuilds the index
+from fresh sibling docs and redeploys — mirror of cendor-site. The custom domain `mcp.cendor.ai`
+is bound (declared in `wrangler.jsonc` `routes`). Local `wrangler deploy` is not the normal path;
+use the git integration (or a dashboard retrigger for a docs-only refresh, since the index is
+gitignored and a docs change alone doesn't touch this repo).
 
 ```bash
 pnpm build
 wrangler dev             # local workerd — safe, does NOT deploy
-# LAUNCH GATE ONLY:
-wrangler deploy          # deploys the Worker
 ```
 
-**Deploy steps captured for the launch gate (do NOT run now):**
+Smoke-test after a deploy: `curl -s https://mcp.cendor.ai -X POST -H 'content-type: application/json'
+-d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` returns the five tools.
 
-1. `wrangler deploy` (Cloudflare account holding the `cendor.ai` zone; `CLOUDFLARE_API_TOKEN`).
-   Prefer the Workers-Builds git integration (build command `pnpm build:cf`, needs `GH_DOCS_TOKEN`
-   for the private docs repos) so pushes rebuild from fresh sibling docs — mirror cendor-site.
-2. Bind the custom domain **`mcp.cendor.ai`** (dashboard → Worker → Triggers → Custom Domains, or via
-   the `routes` entry in `wrangler.jsonc`). DNS is already on Cloudflare.
-3. Smoke-test: `curl -s https://mcp.cendor.ai -X POST -H 'content-type: application/json' -d
-   '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` returns the five tools.
-
-**Deploy order at launch:** push the docs repos first (so the index builds from fresh docs), then
-mcp + site.
+**Deploy order (docs changes):** push the docs repos first (so the index builds from fresh docs),
+then retrigger/redeploy mcp + push the site.
 
 ## After every release — sync version surfaces
 

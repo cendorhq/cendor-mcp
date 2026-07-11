@@ -36,11 +36,13 @@ libraries themselves.
    `cendor.ai/docs/for-ai-assistants` and `/releases` for the maintained truth.
 6. **No `Co-Authored-By` trailer** on commits (org-wide rule). Conventional-ish messages.
 
-## Release / deploy posture — HELD FOR LAUNCH
+## Release / deploy posture — LIVE, GATED
 
-- **Do not publish `@cendor/mcp` (npm) or `cendor-mcp` (PyPI), and do not `wrangler deploy` or cut
-  `mcp.cendor.ai` DNS** until the owner opens the launch gate. New packages must exist (first manual
-  publish) before any automated/OIDC publish. `release.yml` is `workflow_dispatch`-only for now.
+- **All three artifacts are live** (npm `@cendor/mcp`, PyPI `cendor-mcp`, Worker `mcp.cendor.ai`,
+  first published 2026-07-10). Packages publish ONLY through the `workflow_dispatch`-gated
+  `release.yml` (`gh workflow run release.yml -f npm=true -f pypi=true`) — a plain push never
+  publishes. The Worker redeploys on every push to `main` via the Cloudflare Workers-Builds git
+  integration, so **pushing this repo IS a deploy of mcp.cendor.ai** — push docs repos first.
 - Runbook: `PUBLISHING.md`. Build order for the Python wheel: `pnpm build:index` **before** `uv build`.
 
 ## Verify (offline)

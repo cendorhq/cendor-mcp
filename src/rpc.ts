@@ -7,8 +7,17 @@
 import type { ToolDef } from './types.js';
 
 // Keep in sync with package.json "version".
-export const SERVER_VERSION = '0.1.1';
-export const DEFAULT_PROTOCOL_VERSION = '2025-06-18';
+export const SERVER_VERSION = '0.1.2';
+// Every spec revision this stateless dispatch implements. initialize clamps to this set — a
+// server must never echo a version it doesn't actually speak (MCP lifecycle: respond with the
+// requested version only if supported, otherwise the latest one the server supports).
+export const SUPPORTED_PROTOCOL_VERSIONS = [
+  '2025-11-25',
+  '2025-06-18',
+  '2025-03-26',
+  '2024-11-05',
+] as const;
+export const DEFAULT_PROTOCOL_VERSION = SUPPORTED_PROTOCOL_VERSIONS[0];
 export const SERVER_INFO = {
   name: 'cendor-mcp',
   title: 'Cendor docs',
@@ -73,8 +82,11 @@ export function handleRpc(msg: JsonRpcRequest, tools: ToolDef[]): JsonRpcRespons
         typeof msg.params?.protocolVersion === 'string'
           ? (msg.params.protocolVersion as string)
           : DEFAULT_PROTOCOL_VERSION;
+      const negotiated = (SUPPORTED_PROTOCOL_VERSIONS as readonly string[]).includes(requested)
+        ? requested
+        : DEFAULT_PROTOCOL_VERSION;
       return ok(id, {
-        protocolVersion: requested,
+        protocolVersion: negotiated,
         capabilities: { tools: { listChanged: false } },
         serverInfo: SERVER_INFO,
         instructions: SERVER_INSTRUCTIONS,

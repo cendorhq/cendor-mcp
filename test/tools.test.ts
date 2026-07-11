@@ -110,6 +110,16 @@ describe('JSON-RPC dispatch (Worker transport)', () => {
     });
   });
 
+  it('initialize clamps an unsupported protocolVersion to the latest supported one', () => {
+    const res = rpc({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'initialize',
+      params: { protocolVersion: '2099-01-01' },
+    });
+    expect(res?.result).toMatchObject({ protocolVersion: '2025-11-25' });
+  });
+
   it('tools/list returns five tools with JSON-Schema inputs', () => {
     const res = rpc({ jsonrpc: '2.0', id: 2, method: 'tools/list' });
     const list = (res?.result as { tools: unknown[] }).tools;

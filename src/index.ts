@@ -17,6 +17,7 @@ export {
   SERVER_INFO,
   SERVER_INSTRUCTIONS,
   DEFAULT_PROTOCOL_VERSION,
+  SUPPORTED_PROTOCOL_VERSIONS,
   type JsonRpcRequest,
   type JsonRpcResponse,
 } from './rpc.js';

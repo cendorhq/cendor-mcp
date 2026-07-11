@@ -10,7 +10,8 @@
   // The remote server is a stateless, read-only Streamable-HTTP MCP endpoint. It uses only Web
   // APIs (Request/Response/URL) — no Node built-ins — so nodejs_compat is intentionally NOT set.
   "observability": { "enabled": true },
-  // mcp.cendor.ai — DNS is on Cloudflare (see cendorhq MEMORY: cendor-site-deploy-state). Bind the
-  // custom domain at the launch gate. Held now: do NOT `wrangler deploy` and do NOT cut this DNS.
+  // mcp.cendor.ai — DNS is on Cloudflare, custom domain bound (live since 2026-07-10). Deploys go
+  // through the Workers-Builds git integration on push to main (build cmd `pnpm build:cf`); local
+  // `wrangler dev` is safe and does not deploy.
   "routes": [{ "pattern": "mcp.cendor.ai", "custom_domain": true }]
 }

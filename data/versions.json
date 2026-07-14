@@ -9,7 +9,7 @@
     { "name": "squeeze", "pypi": "cendor-squeeze", "pypiVer": "1.0.3", "npm": "squeeze", "npmVer": "0.2.8" },
     { "name": "cassette", "pypi": "cendor-cassette", "pypiVer": "1.0.2", "npm": "cassette", "npmVer": "0.2.8" },
     { "name": "acttrace", "pypi": "cendor-acttrace", "pypiVer": "1.5.0", "npm": "acttrace", "npmVer": "0.6.0" },
-    { "name": "libs", "pypi": "cendor-libs", "pypiVer": "1.2.0", "npm": "libs", "npmVer": "0.2.11" },
+    { "name": "libs", "pypi": "cendor-libs", "pypiVer": "1.2.0", "npm": "libs", "npmVer": "0.2.12" },
     { "name": "cendor", "pypi": "cendor", "pypiVer": "1.1.0", "npm": "", "npmVer": "" }
   ],
   "sdk": [

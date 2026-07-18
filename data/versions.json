@@ -13,7 +13,7 @@
     { "name": "cendor", "pypi": "cendor", "pypiVer": "1.1.0", "npm": "", "npmVer": "" }
   ],
   "sdk": [
-    { "name": "sdk", "pypi": "cendor-sdk", "pypiVer": "1.7.1", "npm": "sdk", "npmVer": "0.10.1" }
+    { "name": "sdk", "pypi": "cendor-sdk", "pypiVer": "1.7.2", "npm": "sdk", "npmVer": "0.10.2" }
   ],
   "devtooling": [
     { "name": "mcp", "pypi": "cendor-mcp", "pypiVer": "0.1.3", "npm": "mcp", "npmVer": "0.1.3" },

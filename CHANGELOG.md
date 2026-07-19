@@ -2,6 +2,16 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.4 — 2026-07-19
+
+- **Refresh the bundled docs index for the zod 4 shelf.** Picks up `@cendor/sdk 0.11.0` (TypeScript
+  tool and output schemas migrated to zod 4 — native `z.toJSONSchema`, drops `zod-to-json-schema`;
+  a zod 3 schema is now rejected with a clear error instead of silently producing an empty schema)
+  and the new trap row "Tool / output schema version (SDK)" (32 trap rows), plus the current
+  published versions across both languages. The hosted Worker (`mcp.cendor.ai`) already tracked this;
+  this release brings the offline `npx @cendor/mcp` / `uvx cendor-mcp` bundle in step.
+- `SERVER_VERSION` bumped to 0.1.4 to match.
+
 ## 0.1.3 — 2026-07-11
 
 - **MCP protocol-version negotiation is now spec-compliant.** `initialize` clamps: the server

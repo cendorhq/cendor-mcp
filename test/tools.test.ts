@@ -16,14 +16,23 @@ describe('index', () => {
     expect(INDEX.pages.length).toBeGreaterThan(20);
     expect(INDEX.chunks.length).toBeGreaterThan(50);
     expect(INDEX.traps.length).toBeGreaterThan(10);
-    expect(INDEX.examples.length).toBe(7);
+    expect(INDEX.examples.length).toBe(8);
     expect(new Set(INDEX.pages.map((p) => p.product))).toContain('sdk');
+  });
+
+  it('carries the monitor page + a "watch runs locally" example', () => {
+    expect(INDEX.pages.some((p) => p.slug === 'monitor')).toBe(true);
+    expect(INDEX.examples.some((e) => e.slug === 'watch-runs-locally-cendor-monitor')).toBe(true);
   });
 
   it('carries published versions from the /releases source of truth', () => {
     const tg = INDEX.versions.libraries.find((r) => r.name === 'tokenguard');
     expect(tg?.pypiVer).toMatch(/^\d+\.\d+\.\d+$/);
     expect(tg?.npmVer).toMatch(/^\d+\.\d+\.\d+$/);
+    // Cendor Monitor is an image, not a package — its devtooling row carries image/tag (SC-D10).
+    const mon = INDEX.versions.devtooling.find((r) => r.name === 'monitor');
+    expect(mon?.image).toBe('ghcr.io/cendorhq/cendor-monitor');
+    expect(mon?.tag).toMatch(/^\d+\.\d+\.\d+$/);
   });
 });
 

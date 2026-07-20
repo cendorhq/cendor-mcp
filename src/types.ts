@@ -45,6 +45,10 @@ export interface VersionRow {
   pypiVer: string;
   npm: string; // short npm name (e.g. 'core') or ''
   npmVer: string;
+  // Cendor Monitor is an IMAGE, not a PyPI/npm package. Its devtooling row leaves pypi/npm empty
+  // and carries these instead (additive/optional — package rows omit them). See SC-D10.
+  image?: string; // e.g. 'ghcr.io/cendorhq/cendor-monitor'
+  tag?: string; // e.g. '0.3.0'
 }
 
 export interface Versions {

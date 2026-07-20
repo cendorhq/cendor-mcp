@@ -278,6 +278,22 @@ function parseReleasesAstro(src) {
   return { libraries: arr('libraries'), sdk: arr('sdk'), devtooling: arr('devtooling') };
 }
 
+// Cendor Monitor is an IMAGE (ghcr), not a PyPI/npm package — the site /releases carries it as a
+// foot-note paragraph, so parseReleasesAstro (which reads pypi/npm rows only) can't see it. Carry the
+// image row from the committed versions.json so mcp answers stay version-honest about the monitor
+// image whichever source supplied the package versions. Existing {pypi,npm} rows are untouched (SC-D10).
+function withMonitorImage(devtooling) {
+  const rows = devtooling || [];
+  if (rows.some((d) => d.image)) return rows;
+  try {
+    const fb = JSON.parse(readFileSync(join(ROOT, 'data', 'versions.json'), 'utf8'));
+    const img = (fb.devtooling || []).find((d) => d.image);
+    return img ? [...rows, img] : rows;
+  } catch {
+    return rows;
+  }
+}
+
 function loadVersions() {
   const astro = resolve(ROOT, '../cendor-site/src/pages/releases.astro');
   if (existsSync(astro)) {
@@ -285,7 +301,12 @@ function loadVersions() {
     if (parsed.libraries.length) {
       const dateMatch = readFileSync(astro, 'utf8').match(/as of the (\d{4}-\d{2}-\d{2})/);
       console.log('[build-index] versions ← cendor-site/src/pages/releases.astro (live SoT)');
-      return { ...parsed, asOf: dateMatch ? dateMatch[1] : '', source: 'releases.astro' };
+      return {
+        ...parsed,
+        devtooling: withMonitorImage(parsed.devtooling),
+        asOf: dateMatch ? dateMatch[1] : '',
+        source: 'releases.astro',
+      };
     }
   }
   const fallback = JSON.parse(readFileSync(join(ROOT, 'data', 'versions.json'), 'utf8'));
@@ -293,7 +314,7 @@ function loadVersions() {
   return {
     libraries: fallback.libraries,
     sdk: fallback.sdk,
-    devtooling: fallback.devtooling || [],
+    devtooling: withMonitorImage(fallback.devtooling),
     asOf: fallback.asOf || '',
     source: 'versions.json',
   };

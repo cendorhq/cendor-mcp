@@ -25,7 +25,7 @@ writes the code. The server never pushes into your editor and your codebase neve
 | Tool | What it does |
 |---|---|
 | `search_docs(query, limit?)` | Full-text search over the docs → matching sections with `cendor.ai` URLs. |
-| `get_page(slug)` | A full docs page as markdown (`"tokenguard"`, `"getting-started"`, `"sdk/agents"`, …). |
+| `get_page(slug)` | A full docs page as markdown (`"tokenguard"`, `"getting-started"`, `"sdk/agents"`, `"monitor"`, …). |
 | `get_api(symbol, lang?)` | **The anti-hallucination tool** — the current correct call-shape + the common wrong one, for a symbol. `lang` is `"python"` or `"ts"` (`py` / `js` aliased); omit for both. |
 | `example(task, lang?)` | A runnable, CI-typechecked snippet for a task (`"budget a loop"`, `"gate input"`, …). Same `lang` values as `get_api`. |
 | `list_recipes()` | The cookbook index, grouped by category (recipes live in `cendor-cookbook`). |

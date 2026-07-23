@@ -1,23 +1,103 @@
 {
   "_comment": "Committed FALLBACK mirror of the site /releases source of truth (cendor-site/src/pages/releases.astro). scripts/build-index.mjs prefers to parse the live releases.astro when a cendor-site sibling checkout is present, and falls back to this file otherwise. Keep in sync after every release (see cendorhq root CLAUDE.md -> 'After EVERY release, sync all version/reference surfaces'). Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
-  "asOf": "2026-07-23",
+  "asOf": "2026-07-24",
   "libraries": [
-    { "name": "core", "pypi": "cendor-core", "pypiVer": "1.10.0", "npm": "core", "npmVer": "0.11.0" },
-    { "name": "tokenguard", "pypi": "cendor-tokenguard", "pypiVer": "1.5.0", "npm": "tokenguard", "npmVer": "0.6.0" },
-    { "name": "guardrails", "pypi": "cendor-guardrails", "pypiVer": "1.6.0", "npm": "guardrails", "npmVer": "0.7.5" },
-    { "name": "contextkit", "pypi": "cendor-contextkit", "pypiVer": "1.0.3", "npm": "contextkit", "npmVer": "2.0.4" },
-    { "name": "squeeze", "pypi": "cendor-squeeze", "pypiVer": "1.1.0", "npm": "squeeze", "npmVer": "0.3.4" },
-    { "name": "cassette", "pypi": "cendor-cassette", "pypiVer": "1.1.0", "npm": "cassette", "npmVer": "0.3.1" },
-    { "name": "acttrace", "pypi": "cendor-acttrace", "pypiVer": "1.10.1", "npm": "acttrace", "npmVer": "0.11.2" },
-    { "name": "libs", "pypi": "cendor-libs", "pypiVer": "1.2.0", "npm": "libs", "npmVer": "0.2.19" },
-    { "name": "cendor", "pypi": "cendor", "pypiVer": "1.1.0", "npm": "", "npmVer": "" }
+    {
+      "name": "core",
+      "pypi": "cendor-core",
+      "pypiVer": "1.11.1",
+      "npm": "core",
+      "npmVer": "0.12.1"
+    },
+    {
+      "name": "tokenguard",
+      "pypi": "cendor-tokenguard",
+      "pypiVer": "1.5.0",
+      "npm": "tokenguard",
+      "npmVer": "0.6.1"
+    },
+    {
+      "name": "guardrails",
+      "pypi": "cendor-guardrails",
+      "pypiVer": "1.6.0",
+      "npm": "guardrails",
+      "npmVer": "0.7.6"
+    },
+    {
+      "name": "contextkit",
+      "pypi": "cendor-contextkit",
+      "pypiVer": "1.0.3",
+      "npm": "contextkit",
+      "npmVer": "2.0.5"
+    },
+    {
+      "name": "squeeze",
+      "pypi": "cendor-squeeze",
+      "pypiVer": "1.1.0",
+      "npm": "squeeze",
+      "npmVer": "0.3.5"
+    },
+    {
+      "name": "cassette",
+      "pypi": "cendor-cassette",
+      "pypiVer": "1.1.0",
+      "npm": "cassette",
+      "npmVer": "0.3.2"
+    },
+    {
+      "name": "acttrace",
+      "pypi": "cendor-acttrace",
+      "pypiVer": "1.10.1",
+      "npm": "acttrace",
+      "npmVer": "0.11.3"
+    },
+    {
+      "name": "libs",
+      "pypi": "cendor-libs",
+      "pypiVer": "1.2.0",
+      "npm": "libs",
+      "npmVer": "0.2.20"
+    },
+    {
+      "name": "cendor",
+      "pypi": "cendor",
+      "pypiVer": "1.1.0",
+      "npm": "",
+      "npmVer": ""
+    }
   ],
   "sdk": [
-    { "name": "sdk", "pypi": "cendor-sdk", "pypiVer": "1.15.0", "npm": "sdk", "npmVer": "0.20.0" }
+    {
+      "name": "sdk",
+      "pypi": "cendor-sdk",
+      "pypiVer": "1.15.0",
+      "npm": "sdk",
+      "npmVer": "0.20.1"
+    }
   ],
   "devtooling": [
-    { "name": "mcp", "pypi": "cendor-mcp", "pypiVer": "0.1.5", "npm": "mcp", "npmVer": "0.1.5" },
-    { "name": "init", "pypi": "cendor-init", "pypiVer": "0.2.2", "npm": "init", "npmVer": "0.2.2" },
-    { "name": "monitor", "pypi": "", "pypiVer": "", "npm": "", "npmVer": "", "image": "ghcr.io/cendorhq/cendor-monitor", "tag": "0.7.0" }
+    {
+      "name": "mcp",
+      "pypi": "cendor-mcp",
+      "pypiVer": "0.1.5",
+      "npm": "mcp",
+      "npmVer": "0.1.5"
+    },
+    {
+      "name": "init",
+      "pypi": "cendor-init",
+      "pypiVer": "0.2.2",
+      "npm": "init",
+      "npmVer": "0.2.2"
+    },
+    {
+      "name": "monitor",
+      "pypi": "",
+      "pypiVer": "",
+      "npm": "",
+      "npmVer": "",
+      "image": "ghcr.io/cendorhq/cendor-monitor",
+      "tag": "0.8.0"
+    }
   ]
 }

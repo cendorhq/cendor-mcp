@@ -70,9 +70,9 @@
     {
       "name": "sdk",
       "pypi": "cendor-sdk",
-      "pypiVer": "1.15.0",
+      "pypiVer": "1.16.0",
       "npm": "sdk",
-      "npmVer": "0.20.1"
+      "npmVer": "0.21.0"
     }
   ],
   "devtooling": [

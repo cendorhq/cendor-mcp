@@ -1,62 +1,62 @@
 {
   "_comment": "Committed FALLBACK mirror of the site /releases source of truth (cendor-site/src/pages/releases.astro). scripts/build-index.mjs prefers to parse the live releases.astro when a cendor-site sibling checkout is present, and falls back to this file otherwise. Keep in sync after every release (see cendorhq root CLAUDE.md -> 'After EVERY release, sync all version/reference surfaces'). Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
-  "asOf": "2026-07-24",
+  "asOf": "2026-07-25",
   "libraries": [
     {
       "name": "core",
       "pypi": "cendor-core",
-      "pypiVer": "1.11.1",
+      "pypiVer": "1.13.0",
       "npm": "core",
-      "npmVer": "0.12.2"
+      "npmVer": "0.15.0"
     },
     {
       "name": "tokenguard",
       "pypi": "cendor-tokenguard",
-      "pypiVer": "1.5.1",
+      "pypiVer": "1.6.0",
       "npm": "tokenguard",
-      "npmVer": "0.6.2"
+      "npmVer": "0.8.1"
     },
     {
       "name": "guardrails",
       "pypi": "cendor-guardrails",
       "pypiVer": "1.6.0",
       "npm": "guardrails",
-      "npmVer": "0.7.6"
+      "npmVer": "0.7.9"
     },
     {
       "name": "contextkit",
       "pypi": "cendor-contextkit",
       "pypiVer": "1.0.3",
       "npm": "contextkit",
-      "npmVer": "2.0.5"
+      "npmVer": "2.0.8"
     },
     {
       "name": "squeeze",
       "pypi": "cendor-squeeze",
       "pypiVer": "1.1.1",
       "npm": "squeeze",
-      "npmVer": "0.3.5"
+      "npmVer": "0.3.8"
     },
     {
       "name": "cassette",
       "pypi": "cendor-cassette",
       "pypiVer": "1.1.0",
       "npm": "cassette",
-      "npmVer": "0.3.3"
+      "npmVer": "0.3.6"
     },
     {
       "name": "acttrace",
       "pypi": "cendor-acttrace",
-      "pypiVer": "1.10.1",
+      "pypiVer": "1.12.0",
       "npm": "acttrace",
-      "npmVer": "0.11.3"
+      "npmVer": "0.13.0"
     },
     {
       "name": "libs",
       "pypi": "cendor-libs",
       "pypiVer": "1.2.0",
       "npm": "libs",
-      "npmVer": "0.2.20"
+      "npmVer": "0.2.23"
     },
     {
       "name": "cendor",
@@ -70,9 +70,9 @@
     {
       "name": "sdk",
       "pypi": "cendor-sdk",
-      "pypiVer": "1.17.0",
+      "pypiVer": "1.19.0",
       "npm": "sdk",
-      "npmVer": "0.21.1"
+      "npmVer": "0.23.0"
     }
   ],
   "devtooling": [

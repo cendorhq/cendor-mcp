@@ -27,6 +27,20 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
+
+/**
+ * Read a text file with CRLF line endings normalized away.
+ *
+ * Every parser below is line-anchored (the `## ` / `### ` splits, the code-fence regexes). A Windows
+ * checkout with `core.autocrlf=true` hands us CRLF, and the fence regexes then silently match
+ * NOTHING: measured 2026-07-26 — `pnpm build:index` on such a checkout produced **0 canonical
+ * examples** instead of 8, and said so only in a count line nobody diffs. Normalizing at the door
+ * makes the generator platform-independent, which is the only acceptable behaviour for a build whose
+ * output ships inside the published packages.
+ */
+function readText(file) {
+  return readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+}
 const SITE = 'https://cendor.ai';
 
 // Mirror cendor-site content.config.ts: libs docs → /docs/<slug> (index → /docs); sdk docs →
@@ -297,9 +311,9 @@ function withMonitorImage(devtooling) {
 function loadVersions() {
   const astro = resolve(ROOT, '../cendor-site/src/pages/releases.astro');
   if (existsSync(astro)) {
-    const parsed = parseReleasesAstro(readFileSync(astro, 'utf8'));
+    const parsed = parseReleasesAstro(readText(astro));
     if (parsed.libraries.length) {
-      const dateMatch = readFileSync(astro, 'utf8').match(/as of the (\d{4}-\d{2}-\d{2})/);
+      const dateMatch = readText(astro).match(/as of the (\d{4}-\d{2}-\d{2})/);
       console.log('[build-index] versions ← cendor-site/src/pages/releases.astro (live SoT)');
       return {
         ...parsed,
@@ -356,7 +370,7 @@ function build() {
     for (const file of docFiles(abs)) {
       const slug = basename(file, '.md');
       const url = slug === 'index' ? `${SITE}${route}` : `${SITE}${route}/${slug}`;
-      const md = readFileSync(file, 'utf8');
+      const md = readText(file);
       const { title, body } = titleAndBody(md, slug);
       pages.push({ slug, product, route, url, title, body, headings: headings(body) });
       for (const s of sections(body)) {
@@ -381,7 +395,7 @@ function build() {
   // TypeScript parity doc (cendor-libs-js/docs/parity.md → GitHub, no site route).
   const parityFile = resolve(ROOT, PARITY.file, PARITY.name);
   if (existsSync(parityFile)) {
-    const md = readFileSync(parityFile, 'utf8');
+    const md = readText(parityFile);
     const { title, body } = titleAndBody(md, 'parity');
     pages.push({
       slug: 'parity',

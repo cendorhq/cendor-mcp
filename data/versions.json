@@ -1,13 +1,13 @@
 {
   "_comment": "Committed FALLBACK mirror of the site /releases source of truth (cendor-site/src/pages/releases.astro). scripts/build-index.mjs prefers to parse the live releases.astro when a cendor-site sibling checkout is present, and falls back to this file otherwise. Keep in sync after every release (see cendorhq root CLAUDE.md -> 'After EVERY release, sync all version/reference surfaces'). Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
-  "asOf": "2026-07-26",
+  "asOf": "2026-07-27",
   "libraries": [
     {
       "name": "core",
       "pypi": "cendor-core",
-      "pypiVer": "1.14.0",
+      "pypiVer": "1.14.1",
       "npm": "core",
-      "npmVer": "0.16.0"
+      "npmVer": "0.16.1"
     },
     {
       "name": "tokenguard",
@@ -47,9 +47,9 @@
     {
       "name": "acttrace",
       "pypi": "cendor-acttrace",
-      "pypiVer": "1.13.0",
+      "pypiVer": "1.13.1",
       "npm": "acttrace",
-      "npmVer": "0.14.0"
+      "npmVer": "0.14.1"
     },
     {
       "name": "libs",

@@ -12,7 +12,7 @@
     {
       "name": "tokenguard",
       "pypi": "cendor-tokenguard",
-      "pypiVer": "1.6.0",
+      "pypiVer": "1.6.1",
       "npm": "tokenguard",
       "npmVer": "0.8.2"
     },

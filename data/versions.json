@@ -72,7 +72,7 @@
       "pypi": "cendor-sdk",
       "pypiVer": "1.19.1",
       "npm": "sdk",
-      "npmVer": "0.23.2"
+      "npmVer": "0.23.3"
     }
   ],
   "devtooling": [
@@ -97,7 +97,7 @@
       "npm": "",
       "npmVer": "",
       "image": "ghcr.io/cendorhq/cendor-monitor",
-      "tag": "0.12.1"
+      "tag": "0.12.2"
     }
   ]
 }

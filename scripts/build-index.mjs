@@ -275,22 +275,11 @@ function parseExamples(md) {
 
 // ---------- versions (from the site /releases source of truth, with a committed fallback) ----------
 
-function parseReleasesAstro(src) {
-  // The regex is anchored to `const <name>: Row[] = [...]`, so each named array is parsed
-  // independently — a third table (`devtooling`) can't leak rows into `libraries`/`sdk`.
-  const arr = (name) => {
-    const m = src.match(new RegExp(`const ${name}:\\s*Row\\[\\]\\s*=\\s*\\[([\\s\\S]*?)\\];`));
-    if (!m) return [];
-    const rows = [];
-    const re =
-      /name:\s*'([^']+)'[^\n]*?pypi:\s*'([^']*)'[^\n]*?pypiVer:\s*'([^']*)'[^\n]*?npm:\s*'([^']*)'[^\n]*?npmVer:\s*'([^']*)'/g;
-    for (let r = re.exec(m[1]); r !== null; r = re.exec(m[1])) {
-      rows.push({ name: r[1], pypi: r[2], pypiVer: r[3], npm: r[4], npmVer: r[5] });
-    }
-    return rows;
-  };
-  return { libraries: arr('libraries'), sdk: arr('sdk'), devtooling: arr('devtooling') };
-}
+// NOTE: the old `parseReleasesAstro` regex scraper is GONE. It read the version tables out of
+// releases.astro's source with a line-anchored regex, which failed silently in two measured ways: a
+// Windows checkout (core.autocrlf=true) matched NOTHING, and any edit to the array formatting would
+// have done the same. cendor-site now keeps the versions in src/data/versions.json and renders the
+// page from it, so we read that JSON directly — a parse error is loud, not empty.
 
 // Cendor Monitor is an IMAGE (ghcr), not a PyPI/npm package — the site /releases carries it as a
 // foot-note paragraph, so parseReleasesAstro (which reads pypi/npm rows only) can't see it. Carry the
@@ -309,17 +298,28 @@ function withMonitorImage(devtooling) {
 }
 
 function loadVersions() {
-  const astro = resolve(ROOT, '../cendor-site/src/pages/releases.astro');
-  if (existsSync(astro)) {
-    const parsed = parseReleasesAstro(readText(astro));
-    if (parsed.libraries.length) {
-      const dateMatch = readText(astro).match(/as of the (\d{4}-\d{2}-\d{2})/);
-      console.log('[build-index] versions ← cendor-site/src/pages/releases.astro (live SoT)');
+  // Prefer the sibling checkout's SINGLE SOURCE. cendor-site/src/data/versions.json is the one file
+  // a human edits at release time; /releases and /releases.json both render from it, and
+  // `node scripts/gen-version-mirrors.mjs` (run in cendor-site) regenerates the committed fallback
+  // below from the same data — so the two can only disagree if someone skipped the generator.
+  const json = resolve(ROOT, '../cendor-site/src/data/versions.json');
+  if (existsSync(json)) {
+    // Deliberately NOT wrapped in try/catch: a malformed source must fail the build loudly rather
+    // than degrade to a stale fallback that looks fine and teaches an old version.
+    const parsed = JSON.parse(readText(json));
+    if (parsed.libraries?.length) {
+      console.log('[build-index] versions ← cendor-site/src/data/versions.json (live SoT)');
+      // The monitor is an IMAGE, not a registry package, so the source keeps it in `container`.
+      const monitor = (parsed.container || []).find((c) => c.image);
+      const devtooling = monitor
+        ? [...parsed.devtooling, { name: monitor.name, pypi: '', pypiVer: '', npm: '', npmVer: '', image: monitor.image, tag: monitor.tag }]
+        : parsed.devtooling;
       return {
-        ...parsed,
-        devtooling: withMonitorImage(parsed.devtooling),
-        asOf: dateMatch ? dateMatch[1] : '',
-        source: 'releases.astro',
+        libraries: parsed.libraries,
+        sdk: parsed.sdk,
+        devtooling: withMonitorImage(devtooling),
+        asOf: parsed.asOf || '',
+        source: 'versions.json (site)',
       };
     }
   }

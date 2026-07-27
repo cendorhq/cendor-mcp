@@ -312,7 +312,18 @@ function loadVersions() {
       // The monitor is an IMAGE, not a registry package, so the source keeps it in `container`.
       const monitor = (parsed.container || []).find((c) => c.image);
       const devtooling = monitor
-        ? [...parsed.devtooling, { name: monitor.name, pypi: '', pypiVer: '', npm: '', npmVer: '', image: monitor.image, tag: monitor.tag }]
+        ? [
+            ...parsed.devtooling,
+            {
+              name: monitor.name,
+              pypi: '',
+              pypiVer: '',
+              npm: '',
+              npmVer: '',
+              image: monitor.image,
+              tag: monitor.tag,
+            },
+          ]
         : parsed.devtooling;
       return {
         libraries: parsed.libraries,

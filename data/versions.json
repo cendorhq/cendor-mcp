@@ -97,7 +97,7 @@
       "npm": "",
       "npmVer": "",
       "image": "ghcr.io/cendorhq/cendor-monitor",
-      "tag": "0.14.0"
+      "tag": "0.14.2"
     }
   ]
 }

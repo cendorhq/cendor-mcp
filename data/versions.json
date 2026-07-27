@@ -47,9 +47,9 @@
     {
       "name": "acttrace",
       "pypi": "cendor-acttrace",
-      "pypiVer": "1.13.1",
+      "pypiVer": "1.14.0",
       "npm": "acttrace",
-      "npmVer": "3.0.0"
+      "npmVer": "3.1.0"
     },
     {
       "name": "libs (umbrella)",

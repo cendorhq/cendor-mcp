@@ -7,56 +7,56 @@
       "pypi": "cendor-core",
       "pypiVer": "1.14.2",
       "npm": "core",
-      "npmVer": "0.16.2"
+      "npmVer": "1.0.0"
     },
     {
       "name": "tokenguard",
       "pypi": "cendor-tokenguard",
       "pypiVer": "1.6.1",
       "npm": "tokenguard",
-      "npmVer": "0.8.2"
+      "npmVer": "1.0.0"
     },
     {
       "name": "guardrails",
       "pypi": "cendor-guardrails",
       "pypiVer": "1.6.1",
       "npm": "guardrails",
-      "npmVer": "0.7.10"
+      "npmVer": "1.0.0"
     },
     {
       "name": "contextkit",
       "pypi": "cendor-contextkit",
       "pypiVer": "1.0.3",
       "npm": "contextkit",
-      "npmVer": "2.0.9"
+      "npmVer": "3.0.0"
     },
     {
       "name": "squeeze",
       "pypi": "cendor-squeeze",
       "pypiVer": "1.1.1",
       "npm": "squeeze",
-      "npmVer": "0.3.9"
+      "npmVer": "1.0.0"
     },
     {
       "name": "cassette",
       "pypi": "cendor-cassette",
       "pypiVer": "1.1.1",
       "npm": "cassette",
-      "npmVer": "0.3.7"
+      "npmVer": "1.0.0"
     },
     {
       "name": "acttrace",
       "pypi": "cendor-acttrace",
       "pypiVer": "1.13.1",
       "npm": "acttrace",
-      "npmVer": "0.14.1"
+      "npmVer": "1.0.0"
     },
     {
       "name": "libs (umbrella)",
       "pypi": "cendor-libs",
       "pypiVer": "1.2.0",
       "npm": "libs",
-      "npmVer": "0.2.24"
+      "npmVer": "1.0.0"
     },
     {
       "name": "cendor (alias)",
@@ -72,7 +72,7 @@
       "pypi": "cendor-sdk",
       "pypiVer": "1.20.0",
       "npm": "sdk",
-      "npmVer": "0.24.0"
+      "npmVer": "1.0.0"
     }
   ],
   "devtooling": [

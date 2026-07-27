@@ -2,6 +2,13 @@
 
 [![npm version](https://img.shields.io/npm/v/@cendor/mcp.svg)](https://www.npmjs.com/package/@cendor/mcp) [![PyPI version](https://img.shields.io/pypi/v/cendor-mcp.svg)](https://pypi.org/project/cendor-mcp/) [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+<!-- cendor:downloads:start — self-hosted badges from cendor.ai (no third party in the render path).
+     The numbers live inside the SVGs, regenerated daily from the committed ledger, so this file
+     never goes stale. PyPI excludes index mirrors; npm publishes no mirror filter, which is why the
+     two are shown separately and never summed. Method: https://cendor.ai/downloads -->
+[![cendor-mcp downloads](https://cendor.ai/badge/downloads/cendor-mcp.svg)](https://cendor.ai/downloads) [![all Cendor · PyPI](https://cendor.ai/badge/downloads/pypi.svg)](https://cendor.ai/downloads) [![all Cendor · npm](https://cendor.ai/badge/downloads/npm.svg)](https://cendor.ai/downloads)
+<!-- cendor:downloads:end -->
+
 **A read-only [Model Context Protocol](https://modelcontextprotocol.io) server that hands your
 AI coding assistant Cendor's live docs and correct call-shapes.** Connect it once and, in agent
 mode, your assistant can look up the right way to call Cendor instead of guessing — Cendor is new,

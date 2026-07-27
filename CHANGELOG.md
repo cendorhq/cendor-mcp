@@ -2,6 +2,24 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.6 — 2026-07-27
+
+- **Retire the `releases.astro` regex scraper.** Versions were read out of the site page's *source*
+  with a line-anchored regex. That failed silently in two measured ways: on a Windows checkout
+  (`core.autocrlf=true`) it matched **nothing** and wrote **0 canonical examples instead of 8** into
+  an index that ships inside this package, and any reformatting of the page's array literals would
+  have done the same. cendor-site now keeps the versions in `src/data/versions.json` and renders
+  `/releases` from it, so `build-index.mjs` reads that JSON directly — and deliberately does **not**
+  wrap the parse in `try/catch`: malformed data must fail the build loudly rather than degrade to a
+  stale fallback that looks fine and teaches an old version.
+- **`SERVER_VERSION` is gated.** It drifted behind `package.json` once and `mcp.cendor.ai` introduced
+  itself as `0.1.4` for three releases. The workspace `scripts/check-versions.mjs` now asserts it
+  against the version source, along with the built index's own version stamp.
+- Bundled index refreshed to the 2026-07-27 shelf: `cendor-core` 1.14.2 / `@cendor/core` 0.16.2,
+  `cendor-cassette` 1.1.1, `cendor-guardrails` 1.6.1, `cendor-init` / `@cendor/init` 0.3.0, Cendor
+  Monitor 0.15.0. 38 pages / 275 chunks / 46 traps / 8 examples. The hosted Worker already tracked
+  this (it redeploys on push); this brings the offline `npx` / `uvx` bundle in step.
+
 ## 0.1.4 — 2026-07-19
 
 - **Refresh the bundled docs index for the zod 4 shelf.** Picks up `@cendor/sdk 0.11.0` (TypeScript

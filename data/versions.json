@@ -79,16 +79,16 @@
     {
       "name": "mcp",
       "pypi": "cendor-mcp",
-      "pypiVer": "0.1.5",
+      "pypiVer": "0.1.6",
       "npm": "mcp",
-      "npmVer": "0.1.5"
+      "npmVer": "0.1.6"
     },
     {
       "name": "init",
       "pypi": "cendor-init",
-      "pypiVer": "0.2.2",
+      "pypiVer": "0.3.0",
       "npm": "init",
-      "npmVer": "0.2.2"
+      "npmVer": "0.3.0"
     },
     {
       "name": "monitor",
@@ -97,7 +97,7 @@
       "npm": "",
       "npmVer": "",
       "image": "ghcr.io/cendorhq/cendor-monitor",
-      "tag": "0.14.2"
+      "tag": "0.15.0"
     }
   ]
 }

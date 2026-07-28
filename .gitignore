@@ -24,6 +24,8 @@ build/
 python/dist/
 
 # Guard against an in-repo docs clone (docs are read from siblings, never copied here).
+# fetch-docs.mjs clones into the PARENT dir; these cover a clone made by hand in the wrong place.
 /cendor-libs/
 /cendor-sdk/
 /cendor-libs-js/
+/cendor-cookbook/

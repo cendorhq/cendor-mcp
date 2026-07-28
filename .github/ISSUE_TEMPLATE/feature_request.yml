@@ -1,0 +1,54 @@
+name: Feature request
+description: Suggest an idea or improvement for the Cendor MCP docs server.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repo is **optional developer tooling**, not part of the product — no Cendor library
+        depends on it, and nothing here may weaken the libraries' "local-first, no servers" line. The
+        server is also deliberately **read-only and pull-based**: tools answer queries, and it never
+        initiates `sampling`/`elicitation`, never writes to your client, and never receives your
+        codebase. The checkboxes at the bottom are those constraints.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area?
+      options:
+        - A new tool
+        - An existing tool's arguments or output
+        - Search quality / ranking
+        - The generated index (what gets ingested, how it is chunked)
+        - Local entry points (`npx @cendor/mcp`, `uvx cendor-mcp`)
+        - The remote Worker (mcp.cendor.ai)
+        - Client setup instructions
+        - Docs / README
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: What did your assistant get wrong, or fail to look up, that this would fix?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: For a new or changed tool, give the name, the arguments, and what a good answer looks like.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Fit with how this server is built
+      description: If one of these does not hold, say so in the proposal — it may still be a good idea somewhere else.
+      options:
+        - label: It stays **read-only and pull-based** — no server-initiated `sampling`/`elicitation`, no writes to the client, and no part of the user's codebase sent to the server.
+        - label: It does not require copying docs into this repo — the source of truth stays the library repos, and the index is generated from sibling checkouts.
+        - label: It keeps the local entry points fully **offline** once installed (the index is bundled at build time).
+        - label: It never teaches a call shape newer than what is published on PyPI/npm.
+        - label: No Cendor library would end up depending on this server.

@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability (private report)
+    url: https://github.com/cendorhq/cendor-mcp/security/advisories/new
+    about: Never a public issue — report privately via GitHub Private Vulnerability Reporting. See SECURITY.md.
+  - name: Connect your assistant (setup walkthrough)
+    url: https://cendor.ai/mcp
+    about: Claude Code, Cursor, Copilot agent mode, and Windsurf — remote and local, with the exact config snippets. Start here before filing a connection issue.
+  - name: Documentation
+    url: https://cendor.ai/docs
+    about: The docs this server indexes. A question or an unclear page — read it at the source.
+  - name: Wrong docs text, stale call shape, or a missing trap row
+    url: https://github.com/cendorhq/cendor-libs/issues
+    about: "Docs are never copied into this repo — the index is built from the library repos. Fix the content upstream (cendor-libs for Python + the shared trap registry; cendor-sdk and cendor-libs-js for their own pages)."
+  - name: Cookbook — copy-paste recipes
+    url: https://cendor.ai/cookbook
+    about: What `list_recipes()` links out to. Every recipe runs offline with no API key.

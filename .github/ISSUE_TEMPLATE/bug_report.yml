@@ -1,0 +1,93 @@
+name: Bug report
+description: The Cendor MCP docs server misbehaves — a bad answer, a failed connection, a broken tool.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Two quick routing notes before you start:
+
+        - **Security vulnerability?** Do not open a public issue — report it privately through
+          [GitHub Private Vulnerability Reporting](https://github.com/cendorhq/cendor-mcp/security/advisories/new)
+          (details in [`SECURITY.md`](https://github.com/cendorhq/cendor-mcp/blob/main/SECURITY.md)).
+        - **Is the *docs text* wrong, rather than the server?** Docs are **never copied into this
+          repo** — the index is built from the library repos. A wrong sentence, a stale call shape, or
+          a missing trap row belongs in
+          [cendor-libs](https://github.com/cendorhq/cendor-libs/issues) (Python + the shared
+          `for-ai-assistants` registry), [cendor-sdk](https://github.com/cendorhq/cendor-sdk/issues),
+          or [cendor-libs-js](https://github.com/cendorhq/cendor-libs-js/issues) (parity). File here
+          if the server returns something the source docs do *not* say.
+  - type: dropdown
+    id: how
+    attributes:
+      label: How are you running it?
+      description: Three deployment shapes live here, and they fail differently.
+      options:
+        - "npx @cendor/mcp — local stdio (Node)"
+        - "uvx cendor-mcp — local stdio (Python twin)"
+        - "https://mcp.cendor.ai — remote Streamable HTTP (Cloudflare Worker)"
+        - From a clone of this repo (`pnpm build` / `node dist/cli.js` / `pnpm dev:worker`)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Server version
+      description: The server reports it on `initialize` (your client usually shows it in the MCP panel/logs). For the remote Worker, say "remote" and give the date/time of the call.
+      placeholder: "@cendor/mcp 0.1.6"
+    validations:
+      required: true
+  - type: dropdown
+    id: assistant
+    attributes:
+      label: Which assistant / MCP client?
+      description: MCP tools are called by *agent* modes only — inline autocomplete never calls MCP.
+      options:
+        - Claude Code
+        - Cursor (agent / Composer)
+        - GitHub Copilot agent mode (VS Code)
+        - Windsurf (Cascade)
+        - MCP Inspector
+        - Other MCP client
+    validations:
+      required: true
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Which tool?
+      options:
+        - search_docs
+        - get_page
+        - get_api
+        - example
+        - list_recipes
+        - None — connection / handshake / tool discovery fails
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Node or Python version, and OS
+      description: Not needed for the remote Worker.
+      placeholder: Node 22.14 / Python 3.12.7, macOS 15
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect the server to answer, and what did it answer instead?
+    validations:
+      required: true
+  - type: textarea
+    id: call
+    attributes:
+      label: The tool call and the response
+      description: The exact arguments your assistant sent and what came back. Client logs are welcome.
+      render: json
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you file
+      options:
+        - label: I checked [cendor.ai/docs/for-ai-assistants](https://cendor.ai/docs/for-ai-assistants) — the answer really is wrong there too, or the server disagrees with it.
+        - label: I am in **agent** mode (not inline autocomplete), and the server is listed as connected in my client.
+        - label: This is not a security vulnerability (those go through private reporting, linked above).

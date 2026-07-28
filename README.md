@@ -1,4 +1,11 @@
-# @cendor/mcp · cendor-mcp
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/cendor-mcp-banner-dark.png">
+    <img alt="cendor-mcp" src=".github/assets/cendor-mcp-banner-light.png" width="820">
+  </picture>
+</p>
+
+**A read-only MCP docs server — correct Cendor call-shapes for your AI assistant, not a plausible guess.**
 
 [![npm version](https://img.shields.io/npm/v/@cendor/mcp.svg)](https://www.npmjs.com/package/@cendor/mcp) [![PyPI version](https://img.shields.io/pypi/v/cendor-mcp.svg)](https://pypi.org/project/cendor-mcp/) [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 

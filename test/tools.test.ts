@@ -11,13 +11,37 @@ const call = (name: string, args: Record<string, unknown> = {}): string => {
   return t.handler(args);
 };
 
+// The docs corpus this server bundles, as MEASURED from data/index.json meta on 2026-07-28
+// (pageCount / trapCount / exampleCount). These are EXACT on purpose: `pages > 20` and `traps > 10`
+// were the previous assertions, and under them the page set could have collapsed 38 -> 21 and the
+// trap registry 47 -> 11 — a whole product's docs or three quarters of the anti-hallucination
+// registry silently missing from the bundle — with a green suite. A build-index regression, a
+// sibling checkout on the wrong branch, or a renamed heading is precisely what this test is for.
+// When the docs legitimately grow, UPDATE these numbers (and the org constitution's verify counts:
+// pages / traps / examples) — do not loosen them back into inequalities.
+const EXPECTED_PAGES = 38;
+const EXPECTED_TRAPS = 47;
+const EXPECTED_EXAMPLES = 8;
+
 describe('index', () => {
   it('is built from the sibling docs (never copied)', () => {
-    expect(INDEX.pages.length).toBeGreaterThan(20);
-    expect(INDEX.chunks.length).toBeGreaterThan(50);
-    expect(INDEX.traps.length).toBeGreaterThan(10);
-    expect(INDEX.examples.length).toBe(8);
+    expect(INDEX.pages.length).toBe(EXPECTED_PAGES);
+    expect(INDEX.traps.length).toBe(EXPECTED_TRAPS);
+    expect(INDEX.examples.length).toBe(EXPECTED_EXAMPLES);
+    // Chunks are a function of heading structure inside the pages, so an editorial split of one
+    // section moves this by one with nothing wrong. Kept as a floor deliberately — but a floor far
+    // enough above zero to catch a corpus that failed to chunk (measured 276 on 2026-07-28).
+    expect(INDEX.chunks.length).toBeGreaterThan(200);
     expect(new Set(INDEX.pages.map((p) => p.product))).toContain('sdk');
+  });
+
+  it('meta counts agree with the arrays they describe', () => {
+    // The three bundled artifacts (npm dist, PyPI wheel, Worker) all carry this meta, and answers
+    // are stamped from it. Meta that disagrees with the payload would misreport the corpus.
+    expect(INDEX.meta.pageCount).toBe(INDEX.pages.length);
+    expect(INDEX.meta.chunkCount).toBe(INDEX.chunks.length);
+    expect(INDEX.meta.trapCount).toBe(INDEX.traps.length);
+    expect(INDEX.meta.exampleCount).toBe(INDEX.examples.length);
   });
 
   it('carries the monitor page + a "watch runs locally" example', () => {

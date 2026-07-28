@@ -5,15 +5,30 @@
   </picture>
 </p>
 
-**A read-only MCP docs server — correct Cendor call-shapes for your AI assistant, not a plausible guess.**
+<!-- The header block is centred as one unit, to line up with the banner above. That means HTML, not
+     markdown: GitHub does not process markdown inside an HTML block, so `**bold**` and `[a](b)` would
+     render literally inside a <p align="center">. Verified against the GitHub markdown API. -->
 
-[![npm version](https://img.shields.io/npm/v/@cendor/mcp.svg)](https://www.npmjs.com/package/@cendor/mcp) [![PyPI version](https://img.shields.io/pypi/v/cendor-mcp.svg)](https://pypi.org/project/cendor-mcp/) [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+<p align="center">
+  <strong>A read-only MCP docs server — correct Cendor call-shapes for your AI assistant, not a plausible guess.</strong>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@cendor/mcp"><img alt="npm version" src="https://img.shields.io/npm/v/@cendor/mcp.svg"></a>
+  <a href="https://pypi.org/project/cendor-mcp/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/cendor-mcp.svg"></a>
+  <a href="https://github.com/cendorhq/cendor-mcp/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/cendorhq/cendor-mcp/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
+</p>
 
 <!-- cendor:downloads:start — self-hosted badges from cendor.ai (no third party in the render path).
      The numbers live inside the SVGs, regenerated daily from the committed ledger, so this file
      never goes stale. PyPI excludes index mirrors; npm publishes no mirror filter, which is why the
      two are shown separately and never summed. Method: https://cendor.ai/downloads -->
-[![cendor-mcp downloads](https://cendor.ai/badge/downloads/cendor-mcp.svg)](https://cendor.ai/downloads) [![all Cendor · PyPI](https://cendor.ai/badge/downloads/pypi.svg)](https://cendor.ai/downloads) [![all Cendor · npm](https://cendor.ai/badge/downloads/npm.svg)](https://cendor.ai/downloads)
+<p align="center">
+  <a href="https://cendor.ai/downloads"><img alt="cendor-mcp downloads" src="https://cendor.ai/badge/downloads/cendor-mcp.svg"></a>
+  <a href="https://cendor.ai/downloads"><img alt="all Cendor · PyPI" src="https://cendor.ai/badge/downloads/pypi.svg"></a>
+  <a href="https://cendor.ai/downloads"><img alt="all Cendor · npm" src="https://cendor.ai/badge/downloads/npm.svg"></a>
+</p>
 <!-- cendor:downloads:end -->
 
 **A read-only [Model Context Protocol](https://modelcontextprotocol.io) server that hands your

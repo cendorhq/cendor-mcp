@@ -12,7 +12,7 @@ import type { ToolDef } from './types.js';
 // Keep in step with package.json + python/pyproject.toml. This drifted once and mcp.cendor.ai
 // introduced itself as 0.1.4 for three releases; the workspace gate `scripts/check-versions.mjs`
 // now asserts it against the version source.
-export const SERVER_VERSION = '0.1.6';
+export const SERVER_VERSION = '0.1.7';
 // Every spec revision this stateless dispatch implements. initialize clamps to this set — a
 // server must never echo a version it doesn't actually speak (MCP lifecycle: respond with the
 // requested version only if supported, otherwise the latest one the server supports).

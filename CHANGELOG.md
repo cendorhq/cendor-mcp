@@ -2,6 +2,45 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.7 — 2026-07-28
+
+- **The offline bundle catches up to trap row 47.** The index is gitignored and built at deploy, so
+  `mcp.cendor.ai` picked up the 47th trap row (`FoundryAdapter` ≠ the M365 Agents SDK path — the wrong
+  call returns a valid-looking reply Activity and raises nothing) on the last push, while `npx
+  @cendor/mcp` / `uvx cendor-mcp` users kept serving the 46-row snapshot bundled into 0.1.6. **A
+  hosted server and an offline bundle that disagree about the trap registry is exactly the failure
+  this repo exists to prevent** — an assistant on the local server never hears about a boundary the
+  remote one warns about. Measured from the freshly built `data/index.json` meta: **38 pages / 276
+  chunks / 47 traps / 8 canonical examples** (0.1.6 bundled 38 / 275 / 46 / 8 — the new docs section
+  landed on an existing page, so there is no page-count ripple).
+- **Bundled index refreshed to the current shelf** (`asOf 2026-07-27` in the version source). npm moved
+  to the **shared major 3**:
+  `@cendor/{core,tokenguard,guardrails,squeeze,cassette,libs}` 3.0.0, `@cendor/contextkit` 3.0.1,
+  `@cendor/acttrace` 3.1.0, `@cendor/sdk` 3.0.1, `@cendor/init` 0.4.0. PyPI moved `cendor-acttrace`
+  1.13.1 → 1.14.0. Versions stay **independent across languages** — the parity matrix is the
+  contract, not matching numbers.
+- **Test pins are exact where they can be.** `test/tools.test.ts` asserted `pages > 20` / `traps > 10`,
+  so the page set could have collapsed 38 → 21 and the trap registry 47 → 11 with a green suite. Both
+  are now pinned to the measured count, like `examples` already was. A check that cannot fail is not a
+  check.
+- **CI can no longer pass by doing nothing.** The `build-test` job self-skipped whenever
+  `DOCS_REPOS_TOKEN` was absent — correct for a fork PR (secrets are legitimately unavailable there),
+  a silent hole on `push` to `main`, where an unset or **expired** secret produced a fully green run
+  with zero build and zero tests. The gate now hard-fails on a `main` push and skips only for a PR
+  from a fork.
+- **The docs-clone PAT's expiry is written down** (`PUBLISHING.md`): it expires **2026-08-09** and is
+  load-bearing in both workflows *and* in the Cloudflare Workers-Builds config. It was documented in
+  no file in this repo.
+- Repo-local `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` (the org `.github` repo stays
+  private, so GitHub will not serve org-default health files to this repo once it is public), and
+  `CLAUDE.md` corrections: the retired `releases.astro` regex scraper, and references a public reader
+  cannot resolve.
+- **`PUBLISHING.md` now names the four version surfaces and the pre-dispatch ordering rail.** Editing
+  `data/versions.json` here has **no effect** on a local build — `build-index.mjs` prefers the live
+  `cendor-site/src/data/versions.json` — so the `devtooling` `mcp` row must be bumped **at the source**
+  and `sync-versions` run before `pnpm build:index`, or the shipped bundle introduces itself as the new
+  version while its own version table still names the old one.
+
 ## 0.1.6 — 2026-07-27
 
 - **Retire the `releases.astro` regex scraper.** Versions were read out of the site page's *source*

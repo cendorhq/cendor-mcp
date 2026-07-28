@@ -1,6 +1,6 @@
 {
   "_comment": "GENERATED — do not hand-edit; a maintainer regenerates it from Cendor’s single version source, and a hand edit is overwritten. Committed FALLBACK mirror read by scripts/build-index.mjs when no version source is available at build time. The live source of truth is https://cendor.ai/releases.json. Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
-  "asOf": "2026-07-27",
+  "asOf": "2026-07-28",
   "libraries": [
     {
       "name": "core",

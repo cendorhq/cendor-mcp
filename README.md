@@ -37,9 +37,12 @@ writes the code. The server never pushes into your editor and your codebase neve
 | `example(task, lang?)` | A runnable, CI-typechecked snippet for a task (`"budget a loop"`, `"gate input"`, …). Same `lang` values as `get_api`. |
 | `list_recipes()` | The cookbook index, grouped by category (recipes live in `cendor-cookbook`). |
 
-Answers are stamped with the current published package versions (from the site
-[`/releases`](https://cendor.ai/releases) source of truth), so the server never teaches a shape
-newer than what's on PyPI/npm.
+Answers are stamped with the current published package versions, so the server never teaches a shape
+newer than what's on PyPI/npm. They come from the org-wide version single source,
+`cendor-site/src/data/versions.json` — read as JSON at build from that sibling checkout, published
+publicly as [`/releases.json`](https://cendor.ai/releases.json) (and rendered for humans at
+[`/releases`](https://cendor.ai/releases)), with a generated committed fallback at
+[`data/versions.json`](data/versions.json) for builds with no site sibling.
 
 ## Connect your assistant
 

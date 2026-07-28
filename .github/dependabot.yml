@@ -1,0 +1,47 @@
+version: 2
+updates:
+  # Keep the CI/release/deploy GitHub Actions pinned versions current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore(ci)
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # The canonical TypeScript server (pnpm workspace root).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      dev-dependencies:
+        dependency-type: development
+    # Deferred majors. Each entry states its own reason and the condition that retires it — an
+    # ignore without one is indistinguishable from neglect. These mirror the holds in the two JS
+    # library repos so the org does not take a major here first, by accident, on the smallest repo.
+    ignore:
+      # TS 7: revisit at 7.1 (new compiler API) after ecosystem soak.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # @types/node: track the lowest supported runtime, not the newest Node.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # biome 2: config-migration major — its own separate decision, org-wide.
+      - dependency-name: "@biomejs/biome"
+        update-types: ["version-update:semver-major"]
+
+  # The small Python twin (`cendor-mcp` on PyPI) — a standalone package, not a uv workspace member.
+  - package-ecosystem: pip
+    directory: /python
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      python:
+        patterns: ["*"]

@@ -8,6 +8,11 @@ your code. You can find the full documentation for it
 We have a quick list of common questions to get you started engaging with this project in
 [our documentation](https://github.com/changesets/changesets/blob/main/docs/common-questions.md).
 
-> **Release posture (cendor-mcp):** publishing is **held for the launch gate**. `@cendor/mcp` is a
-> new npm package and must exist before OIDC/trusted publishing; its first publish happens as part
-> of launch, not mid-build. See `PUBLISHING.md`.
+> **Release posture (cendor-mcp): live, but manually gated.** `@cendor/mcp` (npm) and `cendor-mcp`
+> (PyPI) are published — a push to `main` never publishes either. `.github/workflows/release.yml` is
+> `workflow_dispatch`-only, with a separate boolean input per artifact
+> (`gh workflow run release.yml -f npm=true -f pypi=true`), so recording a changeset stages the bump
+> and someone still has to dispatch the release. npm publishes with the `NPM_TOKEN` secret and
+> provenance off (sigstore rejects a private source repo); PyPI publishes via OIDC trusted publishing
+> from the `mcp` environment, no token. Pushing `main` *does* redeploy the `mcp.cendor.ai` Worker.
+> See `PUBLISHING.md`.

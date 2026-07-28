@@ -13,6 +13,35 @@ Three artifacts ship from this repo, **all live since 2026-07-10**:
 > plain push. The Worker redeploys on push to `main` via the Cloudflare Workers-Builds git
 > integration. The libraries stay server-free; this is optional dev tooling.
 
+## ⚠️ The docs-clone PAT expires **2026-08-09**
+
+Nothing in this repo can be built in the cloud without it. `scripts/fetch-docs.mjs` sparse-clones the
+sibling docs repos, which are **private**, so it needs a **fine-grained personal access token** with
+read-only **Contents** on `cendor-libs`, `cendor-sdk`, `cendor-libs-js` and `cendor-cookbook`. The
+same token value is stored in **three** places, each under its own name:
+
+| Where | Name | Breaks if it lapses |
+|---|---|---|
+| GitHub Actions secret | `DOCS_REPOS_TOKEN` | `.github/workflows/ci.yml` — the `build-test` job (it now **fails loudly**; it used to self-skip and report green) |
+| GitHub Actions secret | `DOCS_REPOS_TOKEN` | `.github/workflows/release.yml` — **both** the `npm` and `pypi` jobs; a release cannot build its index, so **no publish is possible** |
+| Cloudflare Workers-Builds build secret | `GH_DOCS_TOKEN` | `mcp.cendor.ai` — every push to `main` rebuilds the index; the build fails and the Worker keeps serving the previously deployed index (stale docs, silently) |
+
+**Who must act: Raghav** (org owner — only he can mint a token with access to `cendorhq` private repos
+and write the Actions secret + the Cloudflare build secret). Two ways to close it, either is enough:
+
+1. **Flip the docs repos public** (planned — FLIP-CHECKLIST rows C1–C4/C6). Then the sparse clones
+   need **no token at all**, both secrets become dead weight, and this whole row disappears. This is
+   the preferred fix.
+2. **Rotate the PAT** — mint a new fine-grained token with the same four repos + read Contents, then
+   update the GitHub secret `DOCS_REPOS_TOKEN` *and* the Cloudflare build secret `GH_DOCS_TOKEN`.
+   Updating only one leaves the other half broken, and the Cloudflare half fails **quietly** (the
+   previous Worker deployment keeps answering).
+
+The token is shared with `cendor-site` and `cendor-sdk-js` (same value, `GH_DOCS_TOKEN` /
+`DOCS_REPOS_TOKEN`), so a rotation is an org-wide task tracked in the workspace `FLIP-CHECKLIST.md` —
+not a cendor-mcp-only chore. Local development is unaffected: sibling checkouts are read from disk
+and never need a token.
+
 ## Build order (always)
 
 The docs index is generated from the sibling docs and is **gitignored** — it must be built before any
@@ -32,9 +61,14 @@ input; the job needs `DOCS_REPOS_TOKEN` to clone the private docs and rebuild th
 `NPM_TOKEN` to publish):
 
 ```bash
-# bump "version" in package.json (+ SERVER_VERSION in src/rpc.ts) + CHANGELOG, push, then:
+# bump ALL FOUR version surfaces together (see "Version surfaces" below), push, then:
 gh workflow run release.yml -f npm=true
 ```
+
+Versioning is hand-bumped here even though `.changeset/` exists: this repo has never carried a
+changeset, `changeset version` is a no-op with none present, and `changeset publish` ships whatever
+`package.json` says. Dev tooling versions on its own cadence (org versioning rule 5), and a MAJOR
+still needs Raghav's explicit approval (rule 1).
 
 `files` ships `dist/` (which includes the inlined docs index) + `README`/`LICENSE`/`NOTICE`. The
 package is fully offline once installed. Provenance stays off (`NPM_CONFIG_PROVENANCE=false`) while
@@ -81,8 +115,40 @@ Smoke-test after a deploy: `curl -s https://mcp.cendor.ai -X POST -H 'content-ty
 **Deploy order (docs changes):** push the docs repos first (so the index builds from fresh docs),
 then retrigger/redeploy mcp + push the site.
 
-## After every release — sync version surfaces
+## Version surfaces — all four move together
 
-The server stamps answers with the published versions. Keep `data/versions.json` (the committed
-fallback) in step with the site `/releases` source of truth — this is part of the org-wide
-"sync all version surfaces after every release" checklist in the root `CLAUDE.md`.
+`SERVER_VERSION` drifted behind `package.json` once and `mcp.cendor.ai` introduced itself as `0.1.4`
+for three releases. Bump these in one commit:
+
+| Surface | What it is |
+|---|---|
+| `package.json` `"version"` | what `changeset publish` ships to npm |
+| `python/pyproject.toml` `version` | what `uv build` stamps on the wheel/sdist |
+| `src/rpc.ts` `SERVER_VERSION` | what the server calls itself in the `initialize` handshake |
+| `CHANGELOG.md` | the entry — record the **measured** index counts, read from `data/index.json` `meta` (`pageCount` / `chunkCount` / `trapCount` / `exampleCount`) after `pnpm build:index`. Never copy counts from prose. |
+
+## Version surfaces — sync the shelf BEFORE the dispatch
+
+The server stamps every answer with the published versions, from the version table baked into the
+built index. The org-wide single source is `cendor-site/src/data/versions.json`; `data/versions.json`
+here is a **generated committed fallback**, read only when no `cendor-site` sibling checkout is
+present — regenerate it with `npm run sync-versions` in cendor-site, **never by hand**.
+
+⚠️ **This includes cendor-mcp's own `devtooling` `mcp` row, and it has to move first.** Editing
+`data/versions.json` here does nothing when a `cendor-site` sibling checkout exists — `build-index.mjs`
+deliberately prefers the live source, so the bundled index takes the mcp version from cendor-site, not
+from this repo. Bumping only this repo's four surfaces therefore ships a package that introduces itself
+as `0.1.7` while its own version table says the latest mcp is `0.1.6`. Pre-dispatch order:
+
+1. In **cendor-site**: bump the `devtooling` `mcp` row (`pypiVer` + `npmVer` + its `note`) in
+   `src/data/versions.json` to the version about to be published, then `npm run sync-versions` —
+   which rewrites `cendor-mcp/data/versions.json` and the other generated mirrors.
+2. Back **here**: `pnpm build:index` (the index is gitignored, so this is what actually re-stamps the
+   bundle), then `pnpm lint && pnpm test`. Commit the regenerated `data/versions.json`.
+3. Push (this redeploys the `mcp.cendor.ai` Worker), then dispatch `release.yml`.
+
+Until step 1 happens, the workspace gate `node scripts/check-versions.mjs` reports `SERVER_VERSION` as
+ahead of the source. On a prepared-but-unpublished release that reading is **correct, not a defect** —
+it is the gate saying "this version is not published yet". Do not silence it by hand-editing a mirror.
+
+Part of the org-wide "sync all version surfaces after every release" checklist in the root `CLAUDE.md`.

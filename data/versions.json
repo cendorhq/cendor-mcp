@@ -79,9 +79,9 @@
     {
       "name": "mcp",
       "pypi": "cendor-mcp",
-      "pypiVer": "0.1.6",
+      "pypiVer": "0.1.7",
       "npm": "mcp",
-      "npmVer": "0.1.6"
+      "npmVer": "0.1.7"
     },
     {
       "name": "init",

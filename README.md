@@ -90,7 +90,7 @@ claude mcp add cendor -- npx -y @cendor/mcp
 ## How it's built (docs are never copied here)
 
 The server's content is **built from the docs source of truth** — the sibling library repos, exactly
-like [cendor-site](https://github.com/cendorhq/cendor-site) does:
+like [cendor.ai](https://cendor.ai) itself does:
 
 - `../cendor-libs/docs` (the seven libraries + the `for-ai-assistants.md` trap registry)
 - `../cendor-sdk/docs` (the governed agent SDK)
@@ -122,3 +122,6 @@ the index the wheel bundles). See [`PUBLISHING.md`](PUBLISHING.md).
 
 Live. `@cendor/mcp` (npm), `cendor-mcp` (PyPI), and the `mcp.cendor.ai` Worker are published/deployed —
 see [`PUBLISHING.md`](PUBLISHING.md). Apache-2.0.
+
+Contributions: [`CONTRIBUTING.md`](CONTRIBUTING.md) · Security reports:
+[`SECURITY.md`](SECURITY.md) (never a public issue) · [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).

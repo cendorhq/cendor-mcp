@@ -1,6 +1,6 @@
 {
   "_comment": "GENERATED — do not hand-edit; a maintainer regenerates it from Cendor’s single version source, and a hand edit is overwritten. Committed FALLBACK mirror read by scripts/build-index.mjs when no version source is available at build time. The live source of truth is https://cendor.ai/releases.json. Versions are INDEPENDENT across languages; the parity matrix, not matching numbers, is the contract.",
-  "asOf": "2026-07-28",
+  "asOf": "2026-07-31",
   "libraries": [
     {
       "name": "core",
@@ -12,9 +12,9 @@
     {
       "name": "tokenguard",
       "pypi": "cendor-tokenguard",
-      "pypiVer": "1.6.1",
+      "pypiVer": "1.6.2",
       "npm": "tokenguard",
-      "npmVer": "3.0.0"
+      "npmVer": "3.0.1"
     },
     {
       "name": "guardrails",

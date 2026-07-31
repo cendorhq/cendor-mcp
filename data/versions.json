@@ -5,23 +5,23 @@
     {
       "name": "core",
       "pypi": "cendor-core",
-      "pypiVer": "1.15.0",
+      "pypiVer": "1.16.0",
       "npm": "core",
-      "npmVer": "3.1.0"
+      "npmVer": "3.2.0"
     },
     {
       "name": "tokenguard",
       "pypi": "cendor-tokenguard",
-      "pypiVer": "1.6.3",
+      "pypiVer": "1.7.0",
       "npm": "tokenguard",
-      "npmVer": "3.0.2"
+      "npmVer": "3.1.0"
     },
     {
       "name": "guardrails",
       "pypi": "cendor-guardrails",
-      "pypiVer": "1.6.1",
+      "pypiVer": "1.7.0",
       "npm": "guardrails",
-      "npmVer": "3.0.0"
+      "npmVer": "3.1.0"
     },
     {
       "name": "contextkit",
@@ -70,9 +70,9 @@
     {
       "name": "sdk",
       "pypi": "cendor-sdk",
-      "pypiVer": "1.21.0",
+      "pypiVer": "1.22.0",
       "npm": "sdk",
-      "npmVer": "3.1.0"
+      "npmVer": "3.2.0"
     }
   ],
   "devtooling": [

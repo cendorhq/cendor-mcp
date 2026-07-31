@@ -26,7 +26,11 @@ const EXPECTED_PAGES = 38;
 // ⚠️ This number is the reason the table must stay CONTIGUOUS: `parseTraps` walks rows until the
 // first line that does not start with `|`, so ONE blank line inside the table silently truncates
 // it — a build that still reported "47 traps" and exited 0 is exactly how that was caught.
-const EXPECTED_TRAPS = 50;
+// 50 -> 53 on 2026-07-31 (the GAPCLOSE wave, Train 1): three rows added —
+// pricing an Azure/Foundry DEPLOYMENT NAME (`prices.register_deployment(name, like=…)`), telling
+// whether a tool failed without string-matching (`Result.tool_errors`), and asserting
+// spans/metrics without installing a process-global provider (`tracer=` / `meter=` / `use_meter`).
+const EXPECTED_TRAPS = 53;
 const EXPECTED_EXAMPLES = 8;
 
 describe('index', () => {

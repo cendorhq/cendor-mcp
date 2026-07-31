@@ -30,6 +30,9 @@ const EXPECTED_PAGES = 38;
 // pricing an Azure/Foundry DEPLOYMENT NAME (`prices.register_deployment(name, like=…)`), telling
 // whether a tool failed without string-matching (`Result.tool_errors`), and asserting
 // spans/metrics without installing a process-global provider (`tracer=` / `meter=` / `use_meter`).
+// 59 -> 61 on 2026-07-31 (the Foundry naming wave): two rows added — `azure-ai-inference` is
+// captured by nothing (and Microsoft retires it 2026-08-26), and a `model-router` deployment is not
+// priceable (the router bills at the serving model's rates, but the call reports the router's id).
 // 53 -> 59 on 2026-07-31 (the GAPCLOSE wave, Train 2): six rows added — streaming from Anthropic
 // (`messages.stream()` / `messages.parse()`, captured in Python since core 1.17.0, and NOT to be
 // made targets in TS where they would double-count), Bedrock with aws-sdk-v3 (captured directly
@@ -38,7 +41,7 @@ const EXPECTED_PAGES = 38;
 // measured 1.49x / 1.14x undercount, and why no scaling factor is applied), gating output on a
 // structured-output call in TS (the `_thenUnwrap` escape, fixed), and `evict="compress"` without
 // squeeze (`on_missing_compressor`).
-const EXPECTED_TRAPS = 59;
+const EXPECTED_TRAPS = 61;
 const EXPECTED_EXAMPLES = 8;
 
 describe('index', () => {

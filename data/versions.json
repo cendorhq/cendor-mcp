@@ -7,7 +7,7 @@
       "pypi": "cendor-core",
       "pypiVer": "1.17.0",
       "npm": "core",
-      "npmVer": "3.3.0"
+      "npmVer": "3.4.0"
     },
     {
       "name": "tokenguard",

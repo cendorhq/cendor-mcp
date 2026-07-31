@@ -59,6 +59,15 @@ const SOURCES = [
     path: process.env.COOKBOOK_PATH || '../cendor-cookbook/recipes',
     optional: true,
   },
+  // The TypeScript recipes moved to their own repo on 2026-07-31 (one toolchain per repo). Both
+  // trees are OPTIONAL and merged by build-index's loadRecipes(); a failure in either degrades to a
+  // shorter category list rather than breaking the docs server build.
+  {
+    repo: 'cendorhq/cendor-cookbook-js',
+    tree: 'recipes',
+    path: process.env.COOKBOOK_JS_PATH || '../cendor-cookbook-js/recipes',
+    optional: true,
+  },
 ];
 
 // shell:false so the token-bearing URL is never echoed to a shell / CI log.

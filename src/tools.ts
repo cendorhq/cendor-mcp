@@ -269,13 +269,32 @@ export function buildTools(index: DocIndex): ToolDef[] {
       title: 'List Cendor cookbook recipes',
       description:
         'Link out to the Cendor cookbook — copy-paste recipes that run offline (recorded with ' +
-        'cassette, no API key). Recipes live in the cendor-cookbook repo; this returns the index ' +
-        'and the recipe categories.',
+        'cassette, no API key). Recipes live in TWO repos, one per language: cendor-cookbook ' +
+        '(Python) and cendor-cookbook-js (TypeScript). This returns the index and the recipe ' +
+        'categories in each.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: () => {
         const r = index.recipes;
-        const cats = r.categories.length ? `\n\nCategories: ${r.categories.join(', ')}.` : '';
-        return `Cendor cookbook — copy-paste recipes, offline (cassette-recorded, no API key):\n- Browse: ${r.url}\n- Source: ${r.github}${cats}`;
+        const lines = [
+          'Cendor cookbook — copy-paste recipes, offline (cassette-recorded, no API key):',
+          `- Browse: ${r.url}`,
+          `- Python source: ${r.github}`,
+        ];
+        if (r.githubTypescript) lines.push(`- TypeScript source: ${r.githubTypescript}`);
+        lines.push(
+          '',
+          'A recipe folder name means the same thing in both repos; they are separate so each has ' +
+            'one unambiguous toolchain.',
+        );
+        if (r.repos) {
+          const py = r.repos.python.categories;
+          const ts = r.repos.typescript.categories;
+          if (py.length) lines.push('', `Python categories: ${py.join(', ')}.`);
+          if (ts.length) lines.push(`TypeScript categories: ${ts.join(', ')}.`);
+        } else if (r.categories.length) {
+          lines.push('', `Categories: ${r.categories.join(', ')}.`);
+        }
+        return lines.join('\n');
       },
     },
   ];

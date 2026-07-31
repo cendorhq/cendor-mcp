@@ -2,6 +2,24 @@
 
 `@cendor/mcp` (npm) and `cendor-mcp` (PyPI) are versioned together.
 
+## 0.1.8 — 2026-07-31
+
+- **The cookbook is TWO repos now, and `list_recipes` says so.** The TypeScript recipes moved to
+  `cendorhq/cendor-cookbook-js` (one toolchain per repo — a root `pyproject.toml` beside scattered
+  `package.json` files gives a devcontainer nothing definite to provision). `scripts/fetch-docs.mjs`
+  gains a second **optional** sparse-clone target and `loadRecipes()` merges both trees, so an
+  assistant asking "what recipe categories are there?" still gets one answer — plus, now, which repo
+  each name lives in. `RecipeIndex` grew `githubTypescript` and `repos` as **additive** fields;
+  `github` still points at the Python repo, so an older client reading only that field keeps working.
+- **Both trees stay optional at build time.** A failure in either shortens the category list; neither
+  can break the docs-server build. Measured from the freshly built `data/index.json` meta:
+  **38 pages / 276 chunks / 50 traps / 8 canonical examples** — unchanged, because no docs page
+  moved; what changed is the recipe link-out. Python categories: agents, apps, bridges, **combos**,
+  frameworks, governance, **libs**, observability, providers, quickstarts, sdk, testing.
+  TypeScript categories: agents, **combos**, **libs**, quickstarts, sdk.
+- `combos/` and `libs/` are new in both cookbooks this release — 16 new Python recipes and 16
+  TypeScript twins covering cross-library cooperation and per-library depth.
+
 ## 0.1.7 — 2026-07-28
 
 - **The offline bundle catches up to trap row 47.** The index is gitignored and built at deploy, so

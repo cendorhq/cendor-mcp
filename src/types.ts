@@ -59,10 +59,21 @@ export interface Versions {
   source: string;
 }
 
+/**
+ * The cookbook link-out index. It is TWO repos since 2026-07-31 — Python in `cendor-cookbook`,
+ * TypeScript in `cendor-cookbook-js` — and a recipe folder name means the same thing in both.
+ * `categories` is the merged, deduped list; `repos` says which tree each name came from. `github`
+ * stays the Python repo so an older client reading only that field still gets a working link.
+ */
 export interface RecipeIndex {
   url: string;
   github: string;
+  githubTypescript?: string;
   categories: string[];
+  repos?: {
+    python: { github: string; categories: string[] };
+    typescript: { github: string; categories: string[] };
+  };
 }
 
 export interface DocIndex {

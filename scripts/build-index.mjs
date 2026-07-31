@@ -69,6 +69,7 @@ const PARITY = {
 };
 
 const COOKBOOK_DIR = process.env.COOKBOOK_PATH || '../cendor-cookbook/recipes';
+const COOKBOOK_JS_DIR = process.env.COOKBOOK_JS_PATH || '../cendor-cookbook-js/recipes';
 
 // ---------- markdown helpers (shared shape with cendor-site/scripts/gen-llms-full.mjs) ----------
 
@@ -345,20 +346,37 @@ function loadVersions() {
   };
 }
 
-// ---------- cookbook (link-out index only; recipes stay in cendor-cookbook) ----------
+// ---------- cookbook (link-out index only; recipes stay in the two cookbook repos) ----------
 
+/** Top-level category directories in one recipe tree ([] when the tree is absent). */
+function categoriesIn(dir) {
+  const abs = resolve(ROOT, dir);
+  if (!existsSync(abs)) return [];
+  return readdirSync(abs).filter((n) => statSync(join(abs, n)).isDirectory());
+}
+
+/**
+ * The cookbook is TWO repos since 2026-07-31 — Python in cendor-cookbook, TypeScript in
+ * cendor-cookbook-js — and a recipe folder name means the same thing in both. `categories` stays the
+ * merged, deduped, sorted list so an assistant asking "what categories are there?" gets one answer;
+ * `repos` says which tree each name came from, so it can also point at the right repo. Both trees are
+ * optional at build time: a missing one shortens the list, it never breaks the build.
+ */
 function loadRecipes() {
-  const dir = resolve(ROOT, COOKBOOK_DIR);
-  let categories = [];
-  if (existsSync(dir)) {
-    categories = readdirSync(dir)
-      .filter((n) => statSync(join(dir, n)).isDirectory())
-      .sort();
-  }
+  const python = categoriesIn(COOKBOOK_DIR);
+  const typescript = categoriesIn(COOKBOOK_JS_DIR);
   return {
     url: `${SITE}/cookbook/`,
     github: 'https://github.com/cendorhq/cendor-cookbook',
-    categories,
+    githubTypescript: 'https://github.com/cendorhq/cendor-cookbook-js',
+    categories: [...new Set([...python, ...typescript])].sort(),
+    repos: {
+      python: { github: 'https://github.com/cendorhq/cendor-cookbook', categories: python.sort() },
+      typescript: {
+        github: 'https://github.com/cendorhq/cendor-cookbook-js',
+        categories: typescript.sort(),
+      },
+    },
   };
 }
 

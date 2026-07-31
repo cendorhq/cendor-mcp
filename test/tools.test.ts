@@ -20,7 +20,13 @@ const call = (name: string, args: Record<string, unknown> = {}): string => {
 // When the docs legitimately grow, UPDATE these numbers (and the org constitution's verify counts:
 // pages / traps / examples) — do not loosen them back into inequalities.
 const EXPECTED_PAGES = 38;
-const EXPECTED_TRAPS = 47;
+// 47 -> 50 on 2026-07-31 (the Foundry/pricing/Gemini wave): three rows added to
+// cendor-libs/docs/for-ai-assistants.md — the Azure v1 GA endpoint, the Foundry SDK needing no
+// cendor-specific code, and Gemini streaming being its own method with CUMULATIVE usage.
+// ⚠️ This number is the reason the table must stay CONTIGUOUS: `parseTraps` walks rows until the
+// first line that does not start with `|`, so ONE blank line inside the table silently truncates
+// it — a build that still reported "47 traps" and exited 0 is exactly how that was caught.
+const EXPECTED_TRAPS = 50;
 const EXPECTED_EXAMPLES = 8;
 
 describe('index', () => {

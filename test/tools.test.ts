@@ -41,11 +41,13 @@ const EXPECTED_PAGES = 38;
 // measured 1.49x / 1.14x undercount, and why no scaling factor is applied), gating output on a
 // structured-output call in TS (the `_thenUnwrap` escape, fixed), and `evict="compress"` without
 // squeeze (`on_missing_compressor`).
+// 63 -> 64 on 2026-08-02 (the output-rate wave): one row added — a missing price rate is
+// UNKNOWN, not free (`prices/1` changed; `MissingRateError` in core 1.20.0 / @cendor/core 3.7.0).
 // 61 -> 63 on 2026-08-02 (the live-pricing wave): two rows added — where a `refresh()` rate came
 // from and its precedence (`prices.explain()`, the cendor-prices feed, the resale/undatable notes),
 // and that prices live in memory so persisting them is explicit (`save`/`load`, `required=True`,
 // and the deliberate absence of any implicit cache).
-const EXPECTED_TRAPS = 63;
+const EXPECTED_TRAPS = 64;
 // 8 -> 9 on 2026-08-02: a ninth canonical example, "Refresh prices, and show where a rate came
 // from" — the visibility half of "if the live price is wrong, the user can overwrite it".
 const EXPECTED_EXAMPLES = 9;

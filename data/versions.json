@@ -5,9 +5,9 @@
     {
       "name": "core",
       "pypi": "cendor-core",
-      "pypiVer": "1.19.1",
+      "pypiVer": "1.19.2",
       "npm": "core",
-      "npmVer": "3.6.1"
+      "npmVer": "3.6.2"
     },
     {
       "name": "tokenguard",
